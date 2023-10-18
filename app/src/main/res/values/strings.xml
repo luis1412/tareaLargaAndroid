@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TrassTarea</string>
+    <string name="botonEmpezar">¡Bienvenido a TrassTareas!</string>
+    <string name="botonEmpezar1">Empezar!</string>
+</resources>
