@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">TrassTarea</string>
-    <string name="botonEmpezar">¡Bienvenido a TrassTareas!</string>
+    <string name="botonEmpezar">Tus tareas, tu ritmo, tu éxito.</string>
     <string name="botonEmpezar1">Empezar!</string>
+    <string name="quedanLista">Quedan:</string>
+    <string name="listaDias">Días</string>
+    <string name="tituloTareaLista">Título de la tarea</string>
+    <string name="acercade">Acerca de...</string>
+    <string name="salir">Salir</string>
 </resources>

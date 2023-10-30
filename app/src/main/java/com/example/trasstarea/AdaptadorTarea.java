@@ -1,0 +1,110 @@
+package com.example.trasstarea;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+
+import listaTareas.Tarea;
+
+public class AdaptadorTarea extends RecyclerView.Adapter {
+    private ArrayList<Tarea> datos;
+    Context contexto;
+
+    public AdaptadorTarea(Context contexto,ArrayList<Tarea> datos) {
+        this.datos = datos;
+        this.contexto = contexto;
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.tarealista,parent,false);
+        TareaViewHolder tarea = new TareaViewHolder(item);
+        return tarea;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        //Asignamos el dato del array correspondiente a la posición actual al
+        //objeto ViewHolder, de forma que se represente en el RecyclerView.
+        ((TareaViewHolder) holder).bindTarea(datos.get(position));
+    }
+
+    @Override
+    public int getItemCount() {
+        //Devolvemos el tamaño de array de datos de Capitales
+        return datos.size();
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public class TareaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        private ImageView imagenEstrella;
+        private TextView tituloTarea;
+        private ProgressBar barraProgresoTarea;
+        private TextView fecha;
+        private TextView numeroDiasRestantes;
+
+        //Método constructor
+        public TareaViewHolder (@NonNull View itemView) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+            imagenEstrella = itemView.findViewById(R.id.estrellaTarea);
+            tituloTarea = itemView.findViewById(R.id.tituloTarea);
+            barraProgresoTarea = itemView.findViewById(R.id.barraProgreso);
+            fecha = itemView.findViewById(R.id.fecha);
+            numeroDiasRestantes = itemView.findViewById(R.id.diasRestantes);
+        }
+
+        //Método que nos permitirá dar valores a cada campo del objeto ViewHolder y que
+        //el mismo pueda ser mostrado en el RecyclerView
+        public void bindTarea(Tarea c) {
+            tituloTarea.setText(c.getTituloTarea());
+            barraProgresoTarea.setProgress(c.getProgreso());
+            fecha.setText(c.getfechaString());
+            numeroDiasRestantes.setText(c.getDiasRestantes());
+            if (c.isPrioritaria()){
+                imagenEstrella.setImageResource(R.drawable.estrellaactiva);
+            }
+            else{
+                imagenEstrella.setImageResource(R.drawable.baseline_star_purple500_24);
+            }
+        }
+
+        //Método para manejar el evento click en un elemento del RecyclerView
+
+      @Override
+        public void onClick(View v) {
+            //Extraemos los valores de los campos de la fila en la que hemos hecho click
+            String resultado = "TItulo" + (((TextView) v.findViewById(R.id.tituloTarea)).getText())
+                    + "Progreso: " + ((ProgressBar) v.findViewById(R.id.barraProgreso)).getProgress() + "fecha" +
+                    ((TextView) v.findViewById(R.id.fecha)).getText() + "Dias Restantes"  + ((TextView) v.findViewById(R.id.diasRestantes)).getText();
+            //Mostramos la información en un diálogo.
+            AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+            builder.setTitle("Información");
+            builder.setMessage(resultado);
+            //builder.setPositiveButton("OK", new DialogInterface().OnClickListener() {
+            //    public void onClick(DialogInterface dialog, int which) {
+            //        dialog.cancel();
+             //   }
+            }//);
+
+           // builder.show();
+        }
+    }
+
+
+
