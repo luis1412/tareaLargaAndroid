@@ -1,12 +1,16 @@
 package com.example.trasstarea;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -79,6 +83,37 @@ public void inicializarListaPrioritarias(){
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == R.id.action_salir){
+            Toast.makeText(this, "Hasta pronto compadre", Toast.LENGTH_SHORT).show();
+            finish();
+        } else if (item.getItemId() == R.id.acercade) {
+            showDialog(this);
+        } else if (item.getItemId() == R.id.anadirTarea) {
+            Intent iVista = new Intent(ListadoActivity.this, CrearTareaActivity.class);
+            startActivity(iVista);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public static void showDialog(Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Acerca de");
+        builder.setMessage(
+                "Aplicación: TrassTarea\n" +
+                        "Centro: IES Trassierra\n" +
+                        "Autor: Luis Herrador Cruz\n" +
+                        "Año: 2023"
+        );
+        builder.setPositiveButton("Aceptar", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public void init() {

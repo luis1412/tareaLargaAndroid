@@ -3,22 +3,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/anadirTarea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/baseline_post_add_24"
-        android:title="Item"
+        android:title="@string/añadirTarea"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/filtrar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/baseline_star_purple500_24"
-        android:title="Item"
+        android:title="@string/filtrarPrioridad"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/acercade"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="@string/acercade" />
     <item
+        android:id="@+id/action_salir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="@string/salir" />

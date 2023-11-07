@@ -1,12 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TrassTarea</string>
-    <string name="botonEmpezar">Tus tareas, tu ritmo, tu éxito.</string>
-    <string name="botonEmpezar1">Empezar!</string>
-    <string name="quedanLista">Quedan:</string>
-    <string name="listaDias">Días</string>
-    <string name="tituloTareaLista">Título de la tarea</string>
-    <string name="acercade">Acerca de...</string>
-    <string name="salir">Salir</string>
     <string name="añadirTarea">Añadir Tarea</string>
     <string name="filtrarPrioridad">Filtrar Prioritarios</string>
     <string name="anadirTarea">Añadir Tarea</string>
@@ -14,7 +7,6 @@
     <string name="fechaCreacion">Fecha Creacion</string>
     <string name="fechaObjetivo">Fecha Objetivo\n</string>
     <string name="barraProgreso">Progreso</string>
-    <string name="prioridad">Prioritaria</string>
     <string name="prioridadCB">Si</string>
     <string name="botonSiguiente">Siguiente</string>
 </resources>

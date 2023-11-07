@@ -10,6 +10,18 @@ public class Tarea {
     boolean prioritaria;
     String diasRestantes;
 
+    public void setDiasRestantes(String diasRestantes) {
+        this.diasRestantes = diasRestantes;
+    }
+
+    public String getGetFechaString() {
+        return getFechaString;
+    }
+
+    public void setGetFechaString(String getFechaString) {
+        this.getFechaString = getFechaString;
+    }
+
     String getFechaString;
     public Tarea(String tituloTarea, int progreso , boolean prioritaria) {
         this.tituloTarea = tituloTarea;
