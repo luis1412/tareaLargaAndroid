@@ -1,4 +1,4 @@
-package com.example.trasstarea;
+package com.example.trasstarea.Fragmentos;
 
 import androidx.lifecycle.ViewModel;
 

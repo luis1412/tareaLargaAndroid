@@ -11,9 +11,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
+
+import com.example.trasstarea.Fragmentos.CrearTareaActivity;
 
 import java.util.ArrayList;
 
@@ -48,16 +48,6 @@ public void inicializarListaPrioritarias(){
         }
 
 
-        /*
-        btCerrar = findViewById(R.id.botonEmpezar);
-        btCerrar.setOnClickListener(new View.OnClickListener() {
-          @Override
-         public void onClick(View v) {
-              finishAffinity();
-         }
-        });
-
-        */
         }
 
 

@@ -9,7 +9,7 @@
     <string name="salir">Salir</string>
     <string name="añadirTarea">Añadir Tarea</string>
     <string name="filtrarPrioridad">Filtrar Prioritarios</string>
-    <string name="anadirTarea">Añadir Tarea</string>
+    <string name="anadirTarea">Añadir tarea</string>
     <string name="tareaTitulo">Titulo Tarea</string>
     <string name="fechaCreacion">Fecha Creacion</string>
     <string name="fechaObjetivo">Fecha Objetivo\n</string>
@@ -17,4 +17,6 @@
     <string name="prioridad">Prioritaria</string>
     <string name="prioridadCB">Si</string>
     <string name="botonSiguiente">Siguiente</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
