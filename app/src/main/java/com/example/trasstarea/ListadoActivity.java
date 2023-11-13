@@ -85,7 +85,7 @@ public void inicializarListaPrioritarias(){
         } else if (item.getItemId() == R.id.acercade) {
             showDialog(this);
         } else if (item.getItemId() == R.id.anadirTarea) {
-            Intent iVista = new Intent(ListadoActivity.this, CrearTareaActivity.class);
+            Intent iVista = new Intent(this, CrearTareaActivity.class);
             startActivity(iVista);
         }
 
