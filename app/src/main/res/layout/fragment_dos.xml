@@ -6,28 +6,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Fragmentos.FragmentDos">
+    tools:context=".Fragmentos.FragmentDos" >
 
     <EditText
-        android:id="@+id/descripcion_FragmentoDos"
+        android:id="@+id/editTextText2"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Descripcion" />
+        android:text="Name" />
 
-    <Button
-        android:id="@+id/Volver_fragmentoDos"
-        android:layout_width="wrap_content"
-        android:layout_height="34dp"
-        android:layout_weight="1"
-        android:text="Volver" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="100dp"
+        android:gravity="bottom"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/guardar_FragmentoDos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Guardar" />
+        <Button
+            android:id="@+id/boton_Volver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Volver" />
+
+        <Button
+            android:id="@+id/boton_Guardar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Guardar" />
+    </LinearLayout>
 </LinearLayout>

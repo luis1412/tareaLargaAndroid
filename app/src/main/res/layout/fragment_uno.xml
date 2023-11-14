@@ -19,68 +19,86 @@
             android:layout_height="match_parent">
 
             <EditText
-                android:id="@+id/fechaObjetivo"
+                android:id="@+id/tareaTitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="36dp"
+                android:layout_marginTop="56dp"
+                android:layout_marginEnd="28dp"
                 android:ems="10"
-                android:inputType="date"
+                android:inputType="text"
                 android:minHeight="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fechaCreacion" />
-
-            <EditText
-                android:id="@+id/fechaCreacion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
-                android:layout_marginEnd="48dp"
-                android:ems="10"
-                android:inputType="date"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tareaTitulo" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
-                android:text="@string/fechaCreacion"
-                app:layout_constraintEnd_toStartOf="@+id/fechaCreacion"
-                app:layout_constraintHorizontal_bias="0.508"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="99dp"
-                android:layout_height="18dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="72dp"
-                android:text="@string/fechaObjetivo"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints" />
 
             <Spinner
                 android:id="@+id/progresoSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="76dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fechaObjetivo" />
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="368dp"
+                app:layout_constraintStart_toEndOf="@+id/textView7"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/fechaObjetivo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="260dp"
+                android:ems="10"
+                android:inputType="date"
+                android:minHeight="48dp"
+                app:layout_constraintEnd_toEndOf="@+id/fechaCreacion"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/fechaCreacion"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/fechaCreacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="date"
+                app:layout_constraintBottom_toTopOf="@+id/fechaObjetivo"
+                app:layout_constraintEnd_toEndOf="@+id/tareaTitulo"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tareaTitulo"
+                app:layout_constraintTop_toBottomOf="@+id/tareaTitulo"
+                app:layout_constraintVertical_bias="0.513" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fechaCreacion"
+                app:layout_constraintBottom_toBottomOf="@+id/fechaCreacion"
+                app:layout_constraintEnd_toEndOf="@+id/textView5"
+                app:layout_constraintStart_toStartOf="@+id/textView5"
+                app:layout_constraintTop_toTopOf="@+id/fechaCreacion"
+                app:layout_constraintVertical_bias="0.576" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="99dp"
+                android:layout_height="18dp"
+                android:text="@string/fechaObjetivo"
+                app:layout_constraintBottom_toBottomOf="@+id/fechaObjetivo"
+                app:layout_constraintEnd_toEndOf="@+id/textView7"
+                app:layout_constraintHorizontal_bias="0.487"
+                app:layout_constraintStart_toStartOf="@+id/textView7"
+                app:layout_constraintTop_toTopOf="@+id/fechaObjetivo" />
 
             <TextView
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
                 android:text="@string/barraProgreso"
-                app:layout_constraintEnd_toStartOf="@+id/progresoSpinner"
-                app:layout_constraintHorizontal_bias="0.421"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                app:layout_constraintBottom_toBottomOf="@+id/progresoSpinner"
+                app:layout_constraintEnd_toEndOf="@+id/textView8"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/textView8"
+                app:layout_constraintTop_toTopOf="@+id/progresoSpinner"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -88,69 +106,50 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="72dp"
                 android:text="@string/prioridad"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/checkBox"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7"
-                app:layout_constraintVertical_bias="0.287"
+                app:layout_constraintTop_toTopOf="@+id/checkBox"
+                app:layout_constraintVertical_bias="0.448"
                 tools:ignore="MissingConstraints" />
 
             <CheckBox
                 android:id="@+id/checkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="432dp"
                 android:text="@string/prioridadCB"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.462"
-                app:layout_constraintStart_toEndOf="@+id/textView8"
-                app:layout_constraintTop_toBottomOf="@+id/progresoSpinner" />
-
-            <EditText
-                android:id="@+id/tareaTitulo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="44dp"
-                android:ems="10"
-                android:inputType="text"
-                android:minHeight="48dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteY="161dp" />
+                app:layout_constraintEnd_toEndOf="@+id/progresoSpinner"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/progresoSpinner"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tareaTitulo"
-                app:layout_constraintEnd_toStartOf="@+id/tareaTitulo"
-                app:layout_constraintHorizontal_bias="0.38"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteY="180dp" />
+                app:layout_constraintBottom_toBottomOf="@+id/tareaTitulo"
+                app:layout_constraintEnd_toEndOf="@+id/textView4"
+                app:layout_constraintHorizontal_bias="0.478"
+                app:layout_constraintStart_toStartOf="@+id/textView4"
+                app:layout_constraintTop_toTopOf="@+id/tareaTitulo"
+                app:layout_constraintVertical_bias="0.586"
+                tools:ignore="MissingConstraints" />
 
             <Button
                 android:id="@+id/botonSiguiente"
                 android:layout_width="133dp"
                 android:layout_height="48dp"
+                android:layout_marginTop="50dp"
                 android:text="@string/botonSiguiente"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.482"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/checkBox"
-                app:layout_constraintVertical_bias="0.69" />
+                app:layout_constraintVertical_bias="0.898" />
 
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="textView8" />
 
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/group2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="checkBox,textView8" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>

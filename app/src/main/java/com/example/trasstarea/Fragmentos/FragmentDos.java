@@ -66,7 +66,7 @@ public class FragmentDos extends Fragment {
         });
 */
         //Botón para cambiar fragmento
-        btIr1 = fragmento2.findViewById(R.id.Volver_fragmentoDos);
+        btIr1 = fragmento2.findViewById(R.id.boton_Volver);
         btIr1.setOnClickListener(view -> comunicador2.onBotonIr1Clicked());
 
         return fragmento2;

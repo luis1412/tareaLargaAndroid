@@ -20,7 +20,6 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="50dp" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
