@@ -1,13 +1,20 @@
 package com.example.trasstarea;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +30,7 @@ public class ListadoActivity extends AppCompatActivity {
 private ArrayList<Tarea> listaTareas = new ArrayList<>();
 
 private ArrayList<Tarea> listaTareasPrioritarias = new ArrayList<>();
-
+    AdaptadorTarea adaptador;
 
 public void inicializarListaPrioritarias(){
     for (Tarea a : listaTareas) {
@@ -36,18 +43,29 @@ public void inicializarListaPrioritarias(){
 }
     private RecyclerView rv;
    // private Button btCerrar;
+
+    ActivityResultContract<Intent, ActivityResult> contract = new ActivityResultContracts.StartActivityForResult();
+
+    ActivityResultCallback<ActivityResult> respuesta = new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == Activity.RESULT_OK){
+                Intent intent = result.getData();
+                Tarea tarea = (Tarea) intent.getSerializableExtra("tarea");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                    listaTareas.add(tarea);
+                }
+               adaptador.notifyDataSetChanged();
+            }
+        }
+    };
+    ActivityResultLauncher<Intent> launcher = registerForActivityResult(contract, respuesta);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado);
         init();
-        Intent intent = getIntent();
-        if (intent.hasExtra("tarea")){
-            Tarea tarea = (Tarea) intent.getSerializableExtra("tarea");
-            listaTareas.add(tarea);
-        }
-
-
         if (1 == 1){
             reciclerView(listaTareas);
         }
@@ -61,7 +79,7 @@ public void inicializarListaPrioritarias(){
 
         public void reciclerView(ArrayList<Tarea> listaTareas){
             //Creamos el adaptador
-            AdaptadorTarea adaptador = new AdaptadorTarea(this, listaTareas);
+            adaptador = new AdaptadorTarea(this, listaTareas);
             //Vinculamos el objeto java RecyclerView con el objeto correspondiente en el layout
             rv = findViewById(R.id.rvTarea);
             //rv.setHasFixedSize(true);
@@ -71,7 +89,7 @@ public void inicializarListaPrioritarias(){
             rv.setRecyclerListener(new RecyclerView.RecyclerListener() {
                 @Override
                 public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-                    Toast.makeText(getBaseContext(), "Posicion: " + holder.getAdapterPosition(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Tarea añadida", Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -94,7 +112,7 @@ public void inicializarListaPrioritarias(){
             showDialog(this);
         } else if (item.getItemId() == R.id.anadirTarea) {
             Intent iVista = new Intent(this, CrearTareaActivity.class);
-            startActivity(iVista);
+            launcher.launch(iVista);
         }
 
         return super.onOptionsItemSelected(item);

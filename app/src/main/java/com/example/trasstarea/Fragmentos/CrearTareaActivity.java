@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -87,7 +88,7 @@ public class CrearTareaActivity extends AppCompatActivity
                                         viewModel.getFechaFinalizacion().getValue());
         Intent intent = new Intent(this, ListadoActivity.class);
         intent.putExtra("tarea", nuevaTarea);
-        startActivity(intent);
-
+        setResult(Activity.RESULT_OK,intent);
+        finish();
         }
 }
