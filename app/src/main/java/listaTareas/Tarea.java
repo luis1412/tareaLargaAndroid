@@ -1,12 +1,14 @@
 package listaTareas;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class Tarea {
+public class Tarea implements Serializable {
     String tituloTarea;
     int progreso;
     GregorianCalendar fechaCreacion;
+    GregorianCalendar fechaObjetivo;
     boolean prioritaria;
     String diasRestantes;
 
@@ -28,8 +30,21 @@ public class Tarea {
         this.progreso = progreso;
         this.fechaCreacion = new GregorianCalendar();
         this.prioritaria = prioritaria;
+        this.fechaObjetivo = new GregorianCalendar(2023, 12, 23);
 
     }
+
+    public Tarea(String tituloTarea, int progreso, boolean prioritaria, String fechaInicio, String fechaObjetivo){
+        this.tituloTarea = tituloTarea;
+        this.progreso = progreso;
+        String[] a = fechaInicio.split("/");
+        this.fechaCreacion = new GregorianCalendar(Integer.parseInt(a[0]),Integer.parseInt(a[1]),Integer.parseInt(a[2]));
+        a = fechaObjetivo.split("/");
+        this.fechaObjetivo = new GregorianCalendar(Integer.parseInt(a[0]),Integer.parseInt(a[1]),Integer.parseInt(a[2]));
+        this.prioritaria = prioritaria;
+
+    }
+
     public String getTituloTarea() {
         return tituloTarea;
     }
@@ -64,6 +79,14 @@ public class Tarea {
         this.fechaCreacion = fechaCreacion;
     }
 
+    public GregorianCalendar getFechaObjetivo() {
+        return fechaObjetivo;
+    }
+
+    public void setFechaObjetivo(GregorianCalendar fechaObjetivo) {
+        this.fechaObjetivo = fechaObjetivo;
+    }
+
     public boolean isPrioritaria() {
         return prioritaria;
     }
@@ -74,7 +97,7 @@ public class Tarea {
 
     public String getDiasRestantes() {
         GregorianCalendar diaActual = new GregorianCalendar();
-        long diferenciaEnMilisegundos = diaActual.getTimeInMillis() - fechaCreacion.getTimeInMillis();
+        long diferenciaEnMilisegundos = fechaObjetivo.getTimeInMillis() - fechaCreacion.getTimeInMillis();
         long diferenciaEnDias = diferenciaEnMilisegundos / (24 * 60 * 60 * 1000);
         diasRestantes = diferenciaEnDias + "";
         return diasRestantes;

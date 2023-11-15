@@ -24,6 +24,7 @@ private ArrayList<Tarea> listaTareas = new ArrayList<>();
 
 private ArrayList<Tarea> listaTareasPrioritarias = new ArrayList<>();
 
+
 public void inicializarListaPrioritarias(){
     for (Tarea a : listaTareas) {
         if (a.isPrioritaria()){
@@ -40,6 +41,13 @@ public void inicializarListaPrioritarias(){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado);
         init();
+        Intent intent = getIntent();
+        if (intent.hasExtra("tarea")){
+            Tarea tarea = (Tarea) intent.getSerializableExtra("tarea");
+            listaTareas.add(tarea);
+        }
+
+
         if (1 == 1){
             reciclerView(listaTareas);
         }
@@ -105,6 +113,7 @@ public void inicializarListaPrioritarias(){
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
 
     public void init() {
             listaTareas.add(new Tarea("Hacer tarta", 50, true));

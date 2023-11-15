@@ -24,13 +24,15 @@ import com.example.trasstarea.R;
  * create an instance of this fragment.
  */
 public class FragmentDos extends Fragment {
-    Button btCambiarNombre, btIr1;
-    EditText etNombre;
+    Button  btIr1, btGuardar;
+    EditText descripcionTarea;
+    private CrearTareaViewModel viewModel;
 
     public FragmentDos() {}
 
     public interface ComunicacionFragmento2{
         void onBotonIr1Clicked();
+        void onBotonGuardaClicked();
     }
     private ComunicacionFragmento2 comunicador2;
 
@@ -47,7 +49,7 @@ public class FragmentDos extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        viewModel = new ViewModelProvider(requireActivity()).get(CrearTareaViewModel.class);
     }
 
     @Override
@@ -55,19 +57,18 @@ public class FragmentDos extends Fragment {
                              Bundle savedInstanceState) {
         //Inflamos el layout de este fragmento
         View fragmento2 = inflater.inflate(R.layout.fragment_dos, container, false);
-
-        //EditText donde se escribe el nombre
-      //  etNombre = fragmento2.findViewById(R.id.et_nombre);
-/*
-        //Botón para cambiar imagen
-        btCambiarNombre = fragmento2.findViewById(R.id.bt_change_nom_frag2);
-        btCambiarNombre.setOnClickListener(view -> {
-            comunicador2.onBotonCambiarNombreClicked(etNombre.getText().toString());
-        });
-*/
         //Botón para cambiar fragmento
         btIr1 = fragmento2.findViewById(R.id.boton_Volver);
         btIr1.setOnClickListener(view -> comunicador2.onBotonIr1Clicked());
+        descripcionTarea = fragmento2.findViewById(R.id.descripcionTarea);
+
+        btGuardar = fragmento2.findViewById(R.id.boton_Guardar);
+        btGuardar.setOnClickListener(view -> {
+            viewModel.setDescripcionTarea(descripcionTarea.getText().toString());
+
+
+        comunicador2.onBotonGuardaClicked();
+        });
 
         return fragmento2;
     }

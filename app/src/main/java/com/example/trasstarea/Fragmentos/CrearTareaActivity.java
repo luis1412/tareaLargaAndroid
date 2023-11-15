@@ -6,28 +6,28 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.trasstarea.ListadoActivity;
 import com.example.trasstarea.R;
 
-public class CrearTareaActivity extends AppCompatActivity
-        implements FragmentUno.ComunicacionFragmento1, FragmentDos.ComunicacionFragmento2 {
-/*
-    private TextView tituloTarea;
-    private TextView fechaCreacion;
-    private TextView fechaObjetivo;
+import listaTareas.Tarea;
 
-    private Spinner progreso;
-    private CheckBox prioritaria;
-*/
+public class CrearTareaActivity extends AppCompatActivity
+        implements FragmentUno.ComunicacionFragmento1, FragmentDos.ComunicacionFragmento2{
+
     ////////////////////////////////////////////////////////////////////////////
     // PASO 4: IMPLEMENTAR INTERFACES DE COMUNICACIÓN DEFINIDAS EN FRAGMENTOS //
     ////////////////////////////////////////////////////////////////////////////
@@ -39,10 +39,14 @@ public class CrearTareaActivity extends AppCompatActivity
         private FragmentManager fragmentManager;
         private boolean side = false;
 
+        private CrearTareaViewModel viewModel;
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_tarea);
+
+        viewModel = new ViewModelProvider(this).get(CrearTareaViewModel.class);
 
         //Creamos instancias de los dos fragmentos
         fragmentoUno = new FragmentUno();
@@ -54,8 +58,7 @@ public class CrearTareaActivity extends AppCompatActivity
         fragmentManager.beginTransaction().add(R.id.fragmentContainerView, fragmentoUno).commit();
 
     }
-
-        ////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
         // PASO 5: SOBRESCRIBIR LOS MÉTODOS DE LAS INTERFACES //
         ////////////////////////////////////////////////////////
 
@@ -74,4 +77,17 @@ public class CrearTareaActivity extends AppCompatActivity
         if(!fragmentoUno.isAdded())
             fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, fragmentoUno).commit();
     }
+
+    @Override
+    public void onBotonGuardaClicked() {
+        Tarea nuevaTarea = new Tarea(viewModel.getTituloTarea().getValue(),
+                                        viewModel.getProgreso().getValue(),
+                                        viewModel.getTareaPrioritaria().getValue(),
+                                        viewModel.getFechaInicio().getValue(),
+                                        viewModel.getFechaFinalizacion().getValue());
+        Intent intent = new Intent(this, ListadoActivity.class);
+        intent.putExtra("tarea", nuevaTarea);
+        startActivity(intent);
+
+        }
 }
