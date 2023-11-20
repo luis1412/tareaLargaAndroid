@@ -3,9 +3,12 @@ package com.example.trasstarea;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -18,7 +21,7 @@ import java.util.ArrayList;
 
 import listaTareas.Tarea;
 
-public class AdaptadorTarea extends RecyclerView.Adapter {
+public class AdaptadorTarea extends RecyclerView.Adapter implements View.OnCreateContextMenuListener {
     private ArrayList<Tarea> datos;
     Context contexto;
 
@@ -31,21 +34,33 @@ public class AdaptadorTarea extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.tarealista,parent,false);
+        item.setOnCreateContextMenuListener(this);
         TareaViewHolder tarea = new TareaViewHolder(item);
         return tarea;
     }
+
+
+
+
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         //Asignamos el dato del array correspondiente a la posición actual al
         //objeto ViewHolder, de forma que se represente en el RecyclerView.
         ((TareaViewHolder) holder).bindTarea(datos.get(position));
+
     }
 
     @Override
     public int getItemCount() {
         //Devolvemos el tamaño de array de datos de Capitales
         return datos.size();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+        MenuInflater inflater = new MenuInflater(view.getContext());
+        inflater.inflate(R.menu.menu_contextual, contextMenu);
     }
 
 

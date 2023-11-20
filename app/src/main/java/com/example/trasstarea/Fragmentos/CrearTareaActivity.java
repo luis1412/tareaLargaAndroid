@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.trasstarea.ListadoActivity;
 import com.example.trasstarea.R;
@@ -65,12 +66,27 @@ public class CrearTareaActivity extends AppCompatActivity
 
         // MÉTODOS DE LA INTERFAZ COMUNICACIONFRAGMENTO1 //
 
+        public boolean comprobarCambiosFragmento(){
+            boolean todoCorrecto = false;
+        if (!(viewModel.getTituloTarea().getValue().isEmpty() || viewModel.getProgreso().getValue().toString().isEmpty() || viewModel.getFechaInicio().getValue().isEmpty() || viewModel.getFechaFinalizacion().getValue().isEmpty())){
+            todoCorrecto = true;
+        }
+        else{
+            Toast.makeText(this, "Tienes que rellenar todos los campos del formulario para continuar", Toast.LENGTH_SHORT).show();
+        }
+        return todoCorrecto;
+        }
+
+
         @Override
-        public void onBotonIr2Clicked() {
+        public void onBotonSiguiente() {
+            if (comprobarCambiosFragmento()){
+                    if(!fragmentoDos.isAdded()){
+                    fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, fragmentoDos).commit();
+            }
+            }
         //Si el fragmento 2 no está cargado, se inicia una transición de fragmentos
-        if(!fragmentoDos.isAdded())
-            fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, fragmentoDos).commit();
-    }
+        }
 
         @Override
         public void onBotonIr1Clicked() {
@@ -80,7 +96,7 @@ public class CrearTareaActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBotonGuardaClicked() {
+    public void onBotonGuardaClicked(){
         Tarea nuevaTarea = new Tarea(viewModel.getTituloTarea().getValue(),
                                         viewModel.getProgreso().getValue(),
                                         viewModel.getTareaPrioritaria().getValue(),
@@ -90,5 +106,5 @@ public class CrearTareaActivity extends AppCompatActivity
         intent.putExtra("tarea", nuevaTarea);
         setResult(Activity.RESULT_OK,intent);
         finish();
-        }
+    }
 }

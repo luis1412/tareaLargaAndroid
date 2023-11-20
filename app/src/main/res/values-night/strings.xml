@@ -9,4 +9,7 @@
     <string name="barraProgreso">Progreso</string>
     <string name="prioridadCB">Si</string>
     <string name="botonSiguiente">Siguiente</string>
+    <string name="verDescripcion">Ver Descripcion</string>
+    <string name="editarTarea">Editar Tarea</string>
+    <string name="borrarTarea">Borrar Tarea</string>
 </resources>

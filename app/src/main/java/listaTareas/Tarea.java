@@ -7,10 +7,23 @@ import java.util.GregorianCalendar;
 public class Tarea implements Serializable {
     String tituloTarea;
     int progreso;
+    String descripcionTarea;
+
+
+
     GregorianCalendar fechaCreacion;
     GregorianCalendar fechaObjetivo;
     boolean prioritaria;
     String diasRestantes;
+
+
+    public String getDescripcionTarea() {
+        return descripcionTarea;
+    }
+
+    public void setDescripcionTarea(String descripcionTarea) {
+        this.descripcionTarea = descripcionTarea;
+    }
 
     public void setDiasRestantes(String diasRestantes) {
         this.diasRestantes = diasRestantes;

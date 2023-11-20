@@ -16,8 +16,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.example.trasstarea.Fragmentos.CrearTareaActivity;
@@ -61,6 +65,8 @@ public void inicializarListaPrioritarias(){
     };
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(contract, respuesta);
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +107,26 @@ public void inicializarListaPrioritarias(){
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_contextual, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.borrar){
+
+        } else if (item.getItemId()== R.id.descripcion) {
+            
+        } else if (item.getItemId() == R.id.editar) {
+            
+        }
+
+
+        return super.onContextItemSelected(item);
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -117,6 +143,8 @@ public void inicializarListaPrioritarias(){
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     public static void showDialog(Context context){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

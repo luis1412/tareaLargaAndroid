@@ -5,8 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -19,16 +17,10 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.trasstarea.DatePicker.DatePickerFragment;
 import com.example.trasstarea.R;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -59,7 +51,7 @@ public class FragmentUno extends Fragment implements  DatePickerDialog.OnDateSet
     public interface ComunicacionFragmento1{
         //Definimos los prototipos de los métodos que se han de implementar
         //en este caso hay dos métodos
-        void onBotonIr2Clicked();
+        void onBotonSiguiente();
     }
 
     @Override
@@ -184,7 +176,7 @@ public class FragmentUno extends Fragment implements  DatePickerDialog.OnDateSet
             /////////////////////////////////////////////////////////////////////////////
             // PASO 6B: LLAMAMOS AL MÉTODO DE LA INTERFAZ IMPLEMENTADA EN LA ACTIVIDAD //
             /////////////////////////////////////////////////////////////////////////////
-            comunicador1.onBotonIr2Clicked();
+            comunicador1.onBotonSiguiente();
         });
 
         return fragmento1;
