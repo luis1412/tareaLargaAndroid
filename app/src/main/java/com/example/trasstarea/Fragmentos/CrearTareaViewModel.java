@@ -23,21 +23,17 @@ public void setPrioritaria(Boolean prioritaria)
 {
     this.tareaPrioritaria.setValue(prioritaria);
 }
-public void setDescripcionTarea(String descripcionTarea)
-{
-    this.descripcionTarea.setValue(descripcionTarea);
-}public void setFechaInicio(String fechaInicio)
-{
-    this.fechaInicio.setValue(fechaInicio);
-}public void setFechaFinalizacion(String fechaFinalizacion)
+public void setDescripcionTarea(String descripcionTarea) {this.descripcionTarea.setValue(descripcionTarea);}
+public void setFechaInicio(String fechaInicio)
+{this.fechaInicio.setValue(fechaInicio);}
+public void setFechaFinalizacion(String fechaFinalizacion)
 {
     this.fechaFinalizacion.setValue(fechaFinalizacion);
 }
-public void setProgreso(Integer progreso)
+        public void setProgreso(Integer progreso)
 {
     this.progreso.setValue(progreso);
 }
-
         public MutableLiveData<String> getTituloTarea() {
             return tituloTarea;
         }

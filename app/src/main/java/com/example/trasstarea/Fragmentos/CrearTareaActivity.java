@@ -28,23 +28,23 @@ import com.example.trasstarea.R;
 import listaTareas.Tarea;
 
 public class CrearTareaActivity extends AppCompatActivity
-        implements FragmentUno.ComunicacionFragmento1, FragmentDos.ComunicacionFragmento2{
+        implements FragmentUno.ComunicacionFragmento1, FragmentDos.ComunicacionFragmento2 {
 
     ////////////////////////////////////////////////////////////////////////////
     // PASO 4: IMPLEMENTAR INTERFACES DE COMUNICACIÓN DEFINIDAS EN FRAGMENTOS //
     ////////////////////////////////////////////////////////////////////////////
 
 
-        private FragmentUno fragmentoUno;
-        private FragmentDos fragmentoDos;
-        private TextView tvNombre;
-        private FragmentManager fragmentManager;
-        private boolean side = false;
+    private FragmentUno fragmentoUno;
+    private FragmentDos fragmentoDos;
+    private TextView tvNombre;
+    private FragmentManager fragmentManager;
+    private boolean side = false;
 
-        private CrearTareaViewModel viewModel;
+    private CrearTareaViewModel viewModel;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_tarea);
 
@@ -61,13 +61,13 @@ public class CrearTareaActivity extends AppCompatActivity
 
     }
     ////////////////////////////////////////////////////////
-        // PASO 5: SOBRESCRIBIR LOS MÉTODOS DE LAS INTERFACES //
-        ////////////////////////////////////////////////////////
+    // PASO 5: SOBRESCRIBIR LOS MÉTODOS DE LAS INTERFACES //
+    ////////////////////////////////////////////////////////
 
-        // MÉTODOS DE LA INTERFAZ COMUNICACIONFRAGMENTO1 //
+    // MÉTODOS DE LA INTERFAZ COMUNICACIONFRAGMENTO1 //
 
-        public boolean comprobarCambiosFragmento(){
-            boolean todoCorrecto = false;
+    public boolean comprobarCambiosFragmento(){
+        boolean todoCorrecto = false;
         if (!(viewModel.getTituloTarea().getValue().isEmpty() || viewModel.getProgreso().getValue().toString().isEmpty() || viewModel.getFechaInicio().getValue().isEmpty() || viewModel.getFechaFinalizacion().getValue().isEmpty())){
             todoCorrecto = true;
         }
@@ -75,36 +75,36 @@ public class CrearTareaActivity extends AppCompatActivity
             Toast.makeText(this, "Tienes que rellenar todos los campos del formulario para continuar", Toast.LENGTH_SHORT).show();
         }
         return todoCorrecto;
-        }
+    }
 
 
-        @Override
-        public void onBotonSiguiente() {
-            if (comprobarCambiosFragmento()){
-                    if(!fragmentoDos.isAdded()){
-                    fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, fragmentoDos).commit();
-            }
-            }
-        //Si el fragmento 2 no está cargado, se inicia una transición de fragmentos
-        }
+    @Override
+    public void onBotonSiguiente() {
+        if (comprobarCambiosFragmento())
+            if (!fragmentoDos.isAdded())
+                fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, fragmentoDos).commit();
+    }
 
-        @Override
-        public void onBotonIr1Clicked() {
+    @Override
+    public void onBotonIr1Clicked() {
         //Si el fragmento 1 no está cargado, se inicia una transición de fragmentos
-        if(!fragmentoUno.isAdded())
+        if (!fragmentoUno.isAdded())
             fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, fragmentoUno).commit();
     }
 
     @Override
-    public void onBotonGuardaClicked(){
+    public void onBotonGuardaClicked() {
         Tarea nuevaTarea = new Tarea(viewModel.getTituloTarea().getValue(),
-                                        viewModel.getProgreso().getValue(),
-                                        viewModel.getTareaPrioritaria().getValue(),
-                                        viewModel.getFechaInicio().getValue(),
-                                        viewModel.getFechaFinalizacion().getValue());
+                viewModel.getProgreso().getValue(),
+                viewModel.getTareaPrioritaria().getValue(),
+                viewModel.getFechaFinalizacion().getValue(),
+                viewModel.getFechaInicio().getValue(),
+                viewModel.getDescripcionTarea().getValue());
         Intent intent = new Intent(this, ListadoActivity.class);
         intent.putExtra("tarea", nuevaTarea);
-        setResult(Activity.RESULT_OK,intent);
+        setResult(Activity.RESULT_OK, intent);
         finish();
     }
+
+
 }

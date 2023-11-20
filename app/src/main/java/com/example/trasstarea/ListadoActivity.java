@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -78,8 +79,6 @@ public void inicializarListaPrioritarias(){
         else{
             reciclerView(listaTareasPrioritarias);
         }
-
-
         }
 
 
@@ -114,12 +113,55 @@ public void inicializarListaPrioritarias(){
         inflater.inflate(R.menu.menu_contextual, menu);
     }
 
+
+    public boolean confirmarCambios(Tarea a){
+       final boolean seBorrar = false;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmar Cambios");
+        builder.setMessage("¿Estás seguro de que deseas realizar estos cambios?");
+
+        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                int indiceTareaBorrar =  listaTareas.indexOf(a);
+                listaTareas.remove(indiceTareaBorrar);
+                adaptador.notifyDataSetChanged();
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        return seBorrar;
+    }
+
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.borrar){
+        Tarea a = adaptador.getTarea();
 
-        } else if (item.getItemId()== R.id.descripcion) {
-            
+        if(item.getItemId() == R.id.borrar){
+            confirmarCambios(a);
+            }
+         else if (item.getItemId()== R.id.descripcion) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Descripcion de la Tarea: " + a.getTituloTarea())
+                    .setMessage(a.getDescripcionTarea())
+                    .setNegativeButton("Cerrar", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // Aquí puedes realizar alguna acción al hacer clic en Aceptar
+                            dialog.dismiss();
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.show();
         } else if (item.getItemId() == R.id.editar) {
             
         }
@@ -162,16 +204,16 @@ public void inicializarListaPrioritarias(){
 
 
     public void init() {
-            listaTareas.add(new Tarea("Hacer tarta", 50, true));
-            listaTareas.add(new Tarea("Hacer Tarea", 20, true));
-            listaTareas.add(new Tarea("Programar C#", 80, false));
-            listaTareas.add(new Tarea("Ir al banco", 0, true));
-            listaTareas.add(new Tarea("LLamar abuelo" , 50, false));
-            listaTareas.add(new Tarea("Comprar esponja", 0, true));
-            listaTareas.add(new Tarea("Comprar friegosuelos", 0 , false));
-            listaTareas.add(new Tarea("Sacar la basura", 0, false));
-            listaTareas.add(new Tarea("ReciclerView" ,  50, true));
-            listaTareas.add(new Tarea("Hacer bizcocho", 50, true));
+            listaTareas.add(new Tarea("Hacer tarta", 50, true, "24/11/2023", "24/04/2023","La receta es secreta"));
+            listaTareas.add(new Tarea("Hacer Tarea", 20, true , "24/11/2023", "24/04/2023", "Android es demasiado dificil"));
+            listaTareas.add(new Tarea("Programar C#", 80, false, "24/11/2023", "24/04/2023", "Programar es dificl"));
+            listaTareas.add(new Tarea("Ir al banco", 0, true, "24/11/2023", "24/04/2023","Me estoy quedando pobre"));
+            listaTareas.add(new Tarea("LLamar abuelo" , 50, false, "24/11/2023", "24/04/2023","Otra vez q no se me olvide"));
+            listaTareas.add(new Tarea("Comprar esponja", 0, true, "24/11/2023", "24/04/2023","Que los paltos no se friegan solos"));
+            listaTareas.add(new Tarea("Comprar friegosuelos", 0 , false,"24/11/2023", "24/04/2023", "El suelo huele mal"));
+            listaTareas.add(new Tarea("Sacar la basura", 0, false,"24/11/2023", "24/04/2023", "Lleva 1 años sin sacarse"));
+            listaTareas.add(new Tarea("ReciclerView" ,  50, true,"24/11/2023", "24/04/2023", "2 semana para hacerlo"));
+            listaTareas.add(new Tarea("Hacer bizcocho", 50, true, "24/11/2023", "24/04/2023","Pero sin azucar que enngorda"));
             inicializarListaPrioritarias();
         }
 

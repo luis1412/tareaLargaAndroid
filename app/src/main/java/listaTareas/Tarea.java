@@ -1,6 +1,8 @@
 package listaTareas;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -9,7 +11,8 @@ public class Tarea implements Serializable {
     int progreso;
     String descripcionTarea;
 
-
+    public static int contadorId = 0;
+    int id = 0;
 
     GregorianCalendar fechaCreacion;
     GregorianCalendar fechaObjetivo;
@@ -25,6 +28,14 @@ public class Tarea implements Serializable {
         this.descripcionTarea = descripcionTarea;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setDiasRestantes(String diasRestantes) {
         this.diasRestantes = diasRestantes;
     }
@@ -38,23 +49,17 @@ public class Tarea implements Serializable {
     }
 
     String getFechaString;
-    public Tarea(String tituloTarea, int progreso , boolean prioritaria) {
+
+    public Tarea(String tituloTarea, int progreso, boolean prioritaria, String fechaInicio, String fechaObjetivo, String descripcionTarea) {
         this.tituloTarea = tituloTarea;
         this.progreso = progreso;
-        this.fechaCreacion = new GregorianCalendar();
+        String[] a = fechaObjetivo.split("/");
+        this.fechaObjetivo = new GregorianCalendar(Integer.parseInt(a[2]), Integer.parseInt(a[1]), Integer.parseInt(a[0]));
+        String[] b = fechaInicio.split("/");
+        this.fechaCreacion = new GregorianCalendar(Integer.parseInt(b[2]), Integer.parseInt(b[1]), Integer.parseInt(b[0]));
         this.prioritaria = prioritaria;
-        this.fechaObjetivo = new GregorianCalendar(2023, 12, 23);
-
-    }
-
-    public Tarea(String tituloTarea, int progreso, boolean prioritaria, String fechaInicio, String fechaObjetivo){
-        this.tituloTarea = tituloTarea;
-        this.progreso = progreso;
-        String[] a = fechaInicio.split("/");
-        this.fechaCreacion = new GregorianCalendar(Integer.parseInt(a[0]),Integer.parseInt(a[1]),Integer.parseInt(a[2]));
-        a = fechaObjetivo.split("/");
-        this.fechaObjetivo = new GregorianCalendar(Integer.parseInt(a[0]),Integer.parseInt(a[1]),Integer.parseInt(a[2]));
-        this.prioritaria = prioritaria;
+        this.descripcionTarea = descripcionTarea;
+        this.id = ++contadorId;
 
     }
 
@@ -81,7 +86,7 @@ public class Tarea implements Serializable {
     public String getfechaString(){
 
         int year = fechaCreacion.get(GregorianCalendar.YEAR);
-        int month = fechaCreacion.get(GregorianCalendar.MONTH) + 1;
+        int month = fechaCreacion.get(GregorianCalendar.MONTH);
         int day = fechaCreacion.get(GregorianCalendar.DAY_OF_MONTH);
         String fecha;
         fecha = day + "/" + month + "/" + year;
@@ -110,8 +115,8 @@ public class Tarea implements Serializable {
 
     public String getDiasRestantes() {
         GregorianCalendar diaActual = new GregorianCalendar();
-        long diferenciaEnMilisegundos = fechaObjetivo.getTimeInMillis() - fechaCreacion.getTimeInMillis();
-        long diferenciaEnDias = diferenciaEnMilisegundos / (24 * 60 * 60 * 1000);
+        long diferenciaEnMilisegundos = fechaCreacion.getTimeInMillis() - diaActual.getTimeInMillis();
+        long diferenciaEnDias = diferenciaEnMilisegundos / (24 * 60 * 60 * 1000) - 30;
         diasRestantes = diferenciaEnDias + "";
         return diasRestantes;
     }
