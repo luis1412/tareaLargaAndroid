@@ -62,6 +62,10 @@ public class FragmentDos extends Fragment {
         btIr1.setOnClickListener(view -> comunicador2.onBotonIr1Clicked());
         descripcionTarea = fragmento2.findViewById(R.id.descripcionTarea);
 
+        if (viewModel.getDescripcionTarea() != null){
+            descripcionTarea.setText(viewModel.getDescripcionTarea().getValue());
+        }
+
         btGuardar = fragmento2.findViewById(R.id.boton_Guardar);
         btGuardar.setOnClickListener(view -> {
             viewModel.setDescripcionTarea(descripcionTarea.getText().toString());

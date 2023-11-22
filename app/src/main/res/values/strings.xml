@@ -22,4 +22,5 @@
     <string name="verDescripcion">Ver Descripcion</string>
     <string name="editarTarea">Editar Tarea</string>
     <string name="borrarTarea">Borrar Tarea</string>
+    <string name="editarTareaActividad">Editar Tarea</string>
 </resources>

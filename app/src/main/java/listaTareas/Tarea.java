@@ -85,9 +85,9 @@ public class Tarea implements Serializable {
 
     public String getfechaString(){
 
-        int year = fechaCreacion.get(GregorianCalendar.YEAR);
-        int month = fechaCreacion.get(GregorianCalendar.MONTH);
-        int day = fechaCreacion.get(GregorianCalendar.DAY_OF_MONTH);
+        int year = fechaObjetivo.get(GregorianCalendar.YEAR);
+        int month = fechaObjetivo.get(GregorianCalendar.MONTH);
+        int day = fechaObjetivo.get(GregorianCalendar.DAY_OF_MONTH);
         String fecha;
         fecha = day + "/" + month + "/" + year;
     return fecha;
@@ -115,8 +115,8 @@ public class Tarea implements Serializable {
 
     public String getDiasRestantes() {
         GregorianCalendar diaActual = new GregorianCalendar();
-        long diferenciaEnMilisegundos = fechaCreacion.getTimeInMillis() - diaActual.getTimeInMillis();
-        long diferenciaEnDias = diferenciaEnMilisegundos / (24 * 60 * 60 * 1000) - 30;
+        long diferenciaEnMilisegundos = diaActual.getTimeInMillis() - fechaCreacion.getTimeInMillis() ;
+        long diferenciaEnDias = diferenciaEnMilisegundos / (24 * 60 * 60 * 1000);
         diasRestantes = diferenciaEnDias + "";
         return diasRestantes;
     }

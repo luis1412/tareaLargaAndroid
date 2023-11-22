@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-    public class CrearTareaViewModel extends ViewModel {
+import listaTareas.Tarea;
+
+public class CrearTareaViewModel extends ViewModel {
 
     private final MutableLiveData<String> tituloTarea = new MutableLiveData<>();
     private final MutableLiveData<Boolean> tareaPrioritaria = new MutableLiveData<>();
@@ -14,6 +16,9 @@ import java.util.GregorianCalendar;
     private final MutableLiveData<String> fechaInicio = new MutableLiveData<>();
     private final MutableLiveData<String> fechaFinalizacion = new MutableLiveData<>();
     private final MutableLiveData<Integer> progreso = new MutableLiveData<>();
+    private final MutableLiveData<Tarea> tareaEditable = new MutableLiveData<>();
+
+
 
 public void setTituloTarea(String tituloTarea)
 {
@@ -26,6 +31,11 @@ public void setPrioritaria(Boolean prioritaria)
 public void setDescripcionTarea(String descripcionTarea) {this.descripcionTarea.setValue(descripcionTarea);}
 public void setFechaInicio(String fechaInicio)
 {this.fechaInicio.setValue(fechaInicio);}
+
+    public void setTareaEditable(Tarea tareaEditable)
+{this.tareaEditable.setValue(tareaEditable);}
+
+
 public void setFechaFinalizacion(String fechaFinalizacion)
 {
     this.fechaFinalizacion.setValue(fechaFinalizacion);
@@ -36,6 +46,9 @@ public void setFechaFinalizacion(String fechaFinalizacion)
 }
         public MutableLiveData<String> getTituloTarea() {
             return tituloTarea;
+        }
+        public MutableLiveData<Tarea> getTareaEditable() {
+            return tareaEditable;
         }
         public MutableLiveData<String> getDescripcionTarea() {return descripcionTarea;}
         public MutableLiveData<Boolean> getTareaPrioritaria() {return tareaPrioritaria;}

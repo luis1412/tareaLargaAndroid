@@ -2,6 +2,7 @@ package com.example.trasstarea.Fragmentos;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import listaTareas.Tarea;
+
 public class FragmentUno extends Fragment implements  DatePickerDialog.OnDateSetListener{
 
     Button btCambiar, btIr2;
@@ -39,6 +42,9 @@ public class FragmentUno extends Fragment implements  DatePickerDialog.OnDateSet
     private CheckBox prioritaria;
 
     private String fechaEscogida;
+
+
+    private Tarea tareaVieja;
 
 
     public FragmentUno(){
@@ -82,6 +88,32 @@ public class FragmentUno extends Fragment implements  DatePickerDialog.OnDateSet
         }
     }
 
+
+    public void actualizarCampos(String titulo, String fechaInicio, String fechaFin, boolean esPrioritaria, int progreso){
+        tituloTarea.setText(titulo);
+        fechaCreacion.setText(fechaInicio);
+        fechaObjetivo.setText(fechaFin);
+        prioritaria.setChecked(esPrioritaria);
+        switch (progreso){
+            case 0:
+                this.progreso.setSelection(0);
+                break;
+           case 25:
+                this.progreso.setSelection(1);
+                break;
+           case 50:
+                this.progreso.setSelection(2);
+                break;
+            case 75:
+                this.progreso.setSelection(3);
+                break;
+           case 100:
+                this.progreso.setSelection(4);
+                break;
+
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +135,7 @@ public class FragmentUno extends Fragment implements  DatePickerDialog.OnDateSet
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         // Cuando se selecciona una fecha, actualizar el texto en el EditText
-                        String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                        String selectedDate = dayOfMonth + "/" + (monthOfYear - 1) + "/" + year;
                            fechaEscogida = selectedDate;
                            a.setText(fechaEscogida);
                         }
@@ -125,6 +157,15 @@ public class FragmentUno extends Fragment implements  DatePickerDialog.OnDateSet
         fechaObjetivo = fragmento1.findViewById(R.id.fechaObjetivo);
         tituloTarea = fragmento1.findViewById(R.id.tareaTitulo);
         prioritaria = fragmento1.findViewById(R.id.prioritariaCB);
+
+
+        if (viewModel.getTituloTarea().getValue() != null){
+
+            actualizarCampos(viewModel.getTituloTarea().getValue(), viewModel.getFechaInicio().getValue().toString(), viewModel.getFechaFinalizacion().getValue().toString(),
+                    viewModel.getTareaPrioritaria().getValue(), viewModel.getProgreso().getValue());
+
+        }
+
 
         //Crear spinner
         List<String> listaProgreso = Arrays.asList("No iniciada", "Iniciada", "Avanzada", "Casi Finalizada", "Finalizada");
