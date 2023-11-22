@@ -172,7 +172,7 @@ public class FragmentUno extends Fragment implements  DatePickerDialog.OnDateSet
 
             }
             viewModel.setProgreso(progresoEntero);
-            viewModel.setPrioritaria(prioritaria.isSelected());
+            viewModel.setPrioritaria(prioritaria.isChecked());
             /////////////////////////////////////////////////////////////////////////////
             // PASO 6B: LLAMAMOS AL MÉTODO DE LA INTERFAZ IMPLEMENTADA EN LA ACTIVIDAD //
             /////////////////////////////////////////////////////////////////////////////

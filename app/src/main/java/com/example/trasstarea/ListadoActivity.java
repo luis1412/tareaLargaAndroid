@@ -34,10 +34,13 @@ import listaTareas.Tarea;
 public class ListadoActivity extends AppCompatActivity {
 private ArrayList<Tarea> listaTareas = new ArrayList<>();
 
+private boolean esFavorita = false;
+
 private ArrayList<Tarea> listaTareasPrioritarias = new ArrayList<>();
     AdaptadorTarea adaptador;
 
 public void inicializarListaPrioritarias(){
+    listaTareasPrioritarias.clear();
     for (Tarea a : listaTareas) {
         if (a.isPrioritaria()){
             listaTareasPrioritarias.add(a);
@@ -73,12 +76,18 @@ public void inicializarListaPrioritarias(){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado);
         init();
-        if (1 == 1){
-            reciclerView(listaTareas);
+        cambiarFavorito();
         }
-        else{
-            reciclerView(listaTareasPrioritarias);
-        }
+
+
+        public void cambiarFavorito(){
+            if (!esFavorita){
+                reciclerView(listaTareas);
+            }
+            else{
+                inicializarListaPrioritarias();
+                reciclerView(listaTareasPrioritarias);
+            }
         }
 
 
@@ -181,6 +190,15 @@ public void inicializarListaPrioritarias(){
         } else if (item.getItemId() == R.id.anadirTarea) {
             Intent iVista = new Intent(this, CrearTareaActivity.class);
             launcher.launch(iVista);
+        } else if (item.getItemId() == R.id.filtrar) {
+            if (esFavorita){
+                esFavorita = false;
+                cambiarFavorito();
+            }
+            else{
+                esFavorita = true;
+                cambiarFavorito();
+            }
         }
 
         return super.onOptionsItemSelected(item);
