@@ -13,4 +13,5 @@
     <string name="editarTarea">Editar Tarea</string>
     <string name="borrarTarea">Borrar Tarea</string>
     <string name="editarTareaActividad">Editar Tarea</string>
+    <string name="disponiblesTarea">No hay tareas disponibles!! añade para verlas</string>
 </resources>

@@ -29,13 +29,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Volver" />
+            android:text="@string/volver" />
 
         <Button
             android:id="@+id/boton_Guardar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Guardar" />
+            android:text="@string/guardar" />
     </LinearLayout>
 </LinearLayout>

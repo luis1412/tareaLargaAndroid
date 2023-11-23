@@ -1,19 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/descripcion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="@string/verDescripcion" />
+        android:title="@string/verDescripcion"
+        android:icon="@drawable/ic_descripcion"
+        android:iconTint="@color/black"
+        android:background="@drawable/menu_contextual_bonito"
+        />
+
+
     <item
         android:id="@+id/editar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="@string/editarTarea" />
+        android:title="@string/editarTarea"
+        android:icon="@drawable/baseline_mode_edit_outline_24"
+        android:iconTint="@color/black"
+        android:background="@drawable/menu_contextual_bonito" />
+
     <item
         android:id="@+id/borrar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="@string/borrarTarea" />
+        android:title="@string/borrarTarea"
+        android:icon="@drawable/delete"
+        android:iconTint="@color/black"
+        android:background="@drawable/menu_contextual_bonito" />
+
 </menu>

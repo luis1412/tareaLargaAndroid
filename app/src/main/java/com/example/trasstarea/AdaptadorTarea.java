@@ -3,6 +3,7 @@ package com.example.trasstarea;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Paint;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -105,7 +106,7 @@ public class AdaptadorTarea extends RecyclerView.Adapter implements View.OnCreat
         public void bindTarea(Tarea c) {
             tituloTarea.setText(c.getTituloTarea());
             barraProgresoTarea.setProgress(c.getProgreso());
-            fecha.setText(c.getfechaString());
+            fecha.setText(c.getfechaString(c.getFechaObjetivo()));
             numeroDiasRestantes.setText(c.getDiasRestantes());
             if (Integer.parseInt(c.getDiasRestantes()) < 0){
                 numeroDiasRestantes.setTextColor(itemView.getContext().getResources().getColor(R.color.red));
@@ -116,6 +117,13 @@ public class AdaptadorTarea extends RecyclerView.Adapter implements View.OnCreat
             else{
                 imagenEstrella.setImageResource(R.drawable.baseline_star_purple500_24);
             }
+            if (c.getProgreso() == 100){
+                Paint paint = tituloTarea.getPaint();
+                paint.setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                paint.setAntiAlias(false);
+
+            }
+
         }
 
         //Método para manejar el evento click en un elemento del RecyclerView

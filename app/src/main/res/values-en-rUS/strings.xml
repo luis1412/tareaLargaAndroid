@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TrassTask</string>
+    <string name="botonEmpezar">Your tasks, your pace, your success.</string>
+    <string name="botonEmpezar1">Start!</string>
+    <string name="quedanLista">Remaining:</string>
+    <string name="listaDias">Days</string>
+    <string name="tituloTareaLista">Task Title</string>
+    <string name="acercade">About...</string>
+    <string name="salir">Exit</string>
+    <string name="añadirTarea">Add Task</string>
+    <string name="filtrarPrioridad">Filter Priorities</string>
+    <string name="anadirTarea">Add Task</string>
+    <string name="tareaTitulo">Task Title</string>
+    <string name="fechaCreacion">Creation Date</string>
+    <string name="fechaObjetivo">Target Date\n</string>
+    <string name="barraProgreso">Progress</string>
+    <string name="prioridad">Priority</string>
+    <string name="prioridadCB">Yes</string>
+    <string name="botonSiguiente">Next</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="verDescripcion">View Description</string>
+    <string name="editarTarea">Edit Task</string>
+    <string name="borrarTarea">Delete Task</string>
+    <string name="editarTareaActividad">Edit Task</string>
+    <string name="disponiblesTarea">No tasks available!! Add some to view them</string>
+    <string name="volver">Go Back</string>
+    <string name="guardar">Save All</string>
+    <string name="noIniciada">Not Started</string>
+    <string name="iniciada">In Progress</string>
+    <string name="avanzada">Advanced</string>
+    <string name="casiFinalizada">Almost Finished</string>
+    <string name="finalizada">Finished</string>
+</resources>

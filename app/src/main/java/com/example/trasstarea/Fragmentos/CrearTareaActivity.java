@@ -85,8 +85,8 @@ public class CrearTareaActivity extends AppCompatActivity
         Tarea nuevaTarea = new Tarea(viewModel.getTituloTarea().getValue(),
                 viewModel.getProgreso().getValue(),
                 viewModel.getTareaPrioritaria().getValue(),
-                viewModel.getFechaFinalizacion().getValue(),
                 viewModel.getFechaInicio().getValue(),
+                viewModel.getFechaFinalizacion().getValue(),
                 viewModel.getDescripcionTarea().getValue());
         Intent intent = new Intent(this, ListadoActivity.class);
         intent.putExtra("editable", false);

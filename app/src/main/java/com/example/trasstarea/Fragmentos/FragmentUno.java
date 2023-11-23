@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringDef;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -61,11 +62,11 @@ public class FragmentUno extends Fragment implements  DatePickerDialog.OnDateSet
     }
 
     @Override
-    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+    public void onDateSet(DatePicker datePicker, int year, int mes, int day) {
         Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR, i);
-        c.set(Calendar.MONTH, i1);
-        c.set(Calendar.DAY_OF_YEAR, i2);
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, mes);
+        c.set(Calendar.DAY_OF_MONTH, day);
         fechaEscogida = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
     }
 
@@ -135,7 +136,7 @@ public class FragmentUno extends Fragment implements  DatePickerDialog.OnDateSet
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         // Cuando se selecciona una fecha, actualizar el texto en el EditText
-                        String selectedDate = dayOfMonth + "/" + (monthOfYear - 1) + "/" + year;
+                        String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
                            fechaEscogida = selectedDate;
                            a.setText(fechaEscogida);
                         }
@@ -168,7 +169,7 @@ public class FragmentUno extends Fragment implements  DatePickerDialog.OnDateSet
 
 
         //Crear spinner
-        List<String> listaProgreso = Arrays.asList("No iniciada", "Iniciada", "Avanzada", "Casi Finalizada", "Finalizada");
+        List<String> listaProgreso = Arrays.asList(getResources().getString(R.string.noIniciada), getResources().getString(R.string.iniciada), getResources().getString(R.string.avanzada), getResources().getString(R.string.casiFinalizada), getResources().getString(R.string.finalizada));
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, listaProgreso);
         progreso.setAdapter(adapter);
 

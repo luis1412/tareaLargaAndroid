@@ -53,15 +53,12 @@ public class EditarTarea extends AppCompatActivity
             tareaVieja = (Tarea) intent2.getSerializableExtra("tareaEditable");
 
             //Conversion de fechas
-            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            String fechaInicial = formato.format(tareaVieja.getFechaObjetivo().getTime());
-            String fechaObjetivo = formato.format(tareaVieja.getFechaCreacion().getTime());
 
             viewModel.setProgreso(tareaVieja.getProgreso());
             viewModel.setPrioritaria(tareaVieja.isPrioritaria());
             viewModel.setTituloTarea(tareaVieja.getTituloTarea());
-            viewModel.setFechaFinalizacion(tareaVieja.getfechaString());
-            viewModel.setFechaInicio(fechaInicial);
+            viewModel.setFechaFinalizacion(tareaVieja.getfechaString(tareaVieja.getFechaObjetivo()));
+            viewModel.setFechaInicio(tareaVieja.getfechaString(tareaVieja.getFechaCreacion()));
             viewModel.setDescripcionTarea(tareaVieja.getDescripcionTarea());
         }
 
@@ -113,8 +110,8 @@ public class EditarTarea extends AppCompatActivity
         Tarea nuevaTarea = new Tarea(viewModel.getTituloTarea().getValue(),
                 viewModel.getProgreso().getValue(),
                 viewModel.getTareaPrioritaria().getValue(),
-                viewModel.getFechaFinalizacion().getValue(),
                 viewModel.getFechaInicio().getValue(),
+                viewModel.getFechaFinalizacion().getValue(),
                 viewModel.getDescripcionTarea().getValue());
 
         Intent intent = new Intent(this, ListadoActivity.class);
