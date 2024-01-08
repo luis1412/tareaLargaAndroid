@@ -17,6 +17,9 @@
         android:title="@string/filtrarPrioridad"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/preferencias"
+        android:title="@string/preferencias" />
+    <item
         android:id="@+id/acercade"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,4 +29,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="@string/salir" />
+
 </menu>

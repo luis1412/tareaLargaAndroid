@@ -13,6 +13,10 @@
         android:theme="@style/Theme.TrassTarea"
         tools:targetApi="31">
         <activity
+            android:name=".Preferencias"
+            android:exported="false"
+            android:label="@string/title_activity_preferencias" />
+        <activity
             android:name=".Fragmentos.EditarTarea"
             android:exported="false" />
         <activity

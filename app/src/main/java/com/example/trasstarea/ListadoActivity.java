@@ -242,6 +242,9 @@ public void inicializarListaPrioritarias(){
                 esFavorita = true;
                 cambiarFavorito();
             }
+        } else if (item.getItemId() == R.id.preferencias) {
+            Intent iVista = new Intent(this, Preferencias.class);
+            launcher.launch(iVista);
         }
 
         return super.onOptionsItemSelected(item);

@@ -1,0 +1,40 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="Visualización">
+
+        <SwitchPreference
+            app:key="tema"
+            app:title="Tema"
+            app:summary="claro, oscuro"
+            />
+        <ListPreference
+            app:key="fuente"
+            app:title="Tamaño de letra"
+            app:entryValues="@array/fuente"
+            app:entries="@array/fuente"
+            >
+        </ListPreference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Ordenación">
+        <ListPreference
+            app:key="criterio"
+            app:title="Criterio"
+            app:summary="Elite el criterio de ordenacion"
+            app:entryValues="@array/criterio"
+            ></ListPreference>
+        <SwitchPreference
+            app:key="orden"
+            app:title="Orden"
+            >
+
+        </SwitchPreference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Servidor Externo">
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
