@@ -1,12 +1,15 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory app:title="Visualización">
 
         <SwitchPreference
             app:key="tema"
             app:title="Tema"
             app:summary="claro, oscuro"
+            android:icon="@drawable/baseline_wb_sunny_24"
             />
         <ListPreference
+            android:icon="@drawable/baseline_font_download_24"
             app:key="fuente"
             app:title="Tamaño de letra"
             app:entryValues="@array/fuente"
@@ -24,16 +27,29 @@
             app:entryValues="@array/criterio"
             ></ListPreference>
         <SwitchPreference
+            android:icon="@drawable/baseline_sort_by_alpha_24"
             app:key="orden"
             app:title="Orden"
+            app:summary="Ascendente o descendente"
+            app:defaultValue="true"
             >
 
         </SwitchPreference>
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Servidor Externo">
-
+    <PreferenceCategory app:title="Almacenamiento">
+        <CheckBoxPreference
+            android:icon="@drawable/baseline_sd_storage_24"
+            app:defaultValue="false"
+            android:key="tarjeta"
+            app:title="Almacenamiento en tarjeta SD"
+            app:summary=""
+            >
+        </CheckBoxPreference>
+        <EditTextPreference
+            app:icon="@drawable/baseline_brush_24"
+            app:title="Limpieza de archivos" />
 
     </PreferenceCategory>
 
