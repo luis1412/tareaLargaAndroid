@@ -1,8 +1,11 @@
 package com.example.trasstarea;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         botonEmpezar = findViewById(R.id.botonEmpezar);
+
         botonEmpezar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -27,7 +31,17 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
 
+    @Override
+    public Resources.Theme getTheme() {
+        SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean b = a.getBoolean("tema", true);
+        if (b){
+
+
+        }
+        return super.getTheme();
 
     }
 }

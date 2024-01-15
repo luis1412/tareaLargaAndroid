@@ -51,6 +51,25 @@
             app:icon="@drawable/baseline_brush_24"
             app:title="Limpieza de archivos" />
 
+        <SwitchPreference
+            app:icon="@drawable/baseline_storage_24"
+            app:title="Base de datos"
+            app:defaultValue="false"
+            />
+
     </PreferenceCategory>
+    <PreferenceCategory app:title="Base de datos externa" >
+        <EditTextPreference app:title="Nombre base de datos" app:defaultValue="bd" />
+        <EditTextPreference app:title="IP"  app:defaultValue="10.0.2.2"/>
+        <EditTextPreference app:title="Puerto" app:defaultValue="1001"/>
+        <EditTextPreference app:title="Usuario" app:defaultValue="usuario"/>
+        <EditTextPreference app:title="Contraseña" app:defaultValue="password"/>
+    </PreferenceCategory>
+    <PreferenceCategory app:title="Restablecer">
+        <Preference app:title="Restablecer"></Preference>
+    </PreferenceCategory>
+
+
+
 
 </PreferenceScreen>
