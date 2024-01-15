@@ -17,12 +17,15 @@ public class Tarea implements Serializable {
     @PrimaryKey(autoGenerate = true)
     @NonNull
     int id;
+    @NonNull
     String tituloTarea;
+    @NonNull
     int progreso;
     String descripcionTarea;
 
-
+    @NonNull
     Date fechaCreacion;
+    @NonNull
     Date fechaObjetivo;
     boolean prioritaria;
     String diasRestantes;
