@@ -32,6 +32,8 @@ import com.example.trasstarea.Fragmentos.EditarTarea;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import listaTareas.Tarea;
 
@@ -68,17 +70,12 @@ private boolean esFavorita = false;
                         int contador = 0;
                         int key=0;
                         //Tarea tareaBorrar = (Tarea) intent.getSerializableExtra("tareaVieja");
-                        appDatabase.daoTarea().actualizarTarea(tarea.getTituloTarea(),tarea.getProgreso(),
-                        tarea.isPrioritaria(),
-                        tarea.getFechaCreacion(),
-                        tarea.getFechaObjetivo(),
-                        tarea.getDescripcionTarea(),
-                        tarea.getId());
+                        Executor executor = Executors.newSingleThreadExecutor();
+                        executor.execute(new ActualizarTarea(tarea));
                     }
                     }
-                verificarTareaVacia();
-                actualizarListas();
-               adaptador.notifyDataSetChanged();
+                    verificarTareaVacia();
+                    adaptador.notifyDataSetChanged();
             }
 
         }
@@ -116,7 +113,8 @@ private boolean esFavorita = false;
         }
 
         public void anadirTareaBD(Tarea tarea){
-            appDatabase.daoTarea().insertarTarea(tarea);
+            Executor executor = Executors.newSingleThreadExecutor();
+            executor.execute(new CrearTarea(tarea));
         }
 
         public void cambiarFavorito(){
@@ -172,9 +170,10 @@ private boolean esFavorita = false;
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 int indiceTareaBorrar =  listaTareas.indexOf(a);
+                Executor executor = Executors.newSingleThreadExecutor();
+                executor.execute(new BorrarTarea(listaTareas.get(indiceTareaBorrar)));
 
-                appDatabase.daoTarea().borrarTarea(listaTareas.get(indiceTareaBorrar).getId());
-                actualizarListas();
+               // appDatabase.daoTarea().borrarTarea();
                 //listaTareas.remove(indiceTareaBorrar);
                 adaptador.notifyDataSetChanged();
                 verificarTareaVacia();
@@ -269,6 +268,45 @@ private boolean esFavorita = false;
         dialog.show();
     }
 
+
+    class BorrarTarea implements Runnable {
+        private Tarea tarea;
+        public BorrarTarea(Tarea tarea) {
+            this.tarea = tarea;
+        }
+        @Override
+        public void run() {
+            appDatabase.daoTarea().borrarTarea(tarea.getId());
+            actualizarListas();
+        }
+    }
+    class ActualizarTarea implements Runnable {
+        private Tarea tarea;
+        public ActualizarTarea(Tarea tarea) {
+            this.tarea = tarea;
+        }
+        @Override
+        public void run() {
+            appDatabase.daoTarea().actualizarTarea(tarea.getTituloTarea(),tarea.getProgreso(),
+                    tarea.isPrioritaria(),
+                    tarea.getFechaCreacion(),
+                    tarea.getFechaObjetivo(),
+                    tarea.getDescripcionTarea(),
+                    tarea.getId());
+            actualizarListas();
+        }
+    }
+    class CrearTarea implements Runnable {
+        private Tarea tarea;
+        public CrearTarea(Tarea tarea) {
+            this.tarea = tarea;
+        }
+        @Override
+        public void run() {
+            appDatabase.daoTarea().insertarTarea(tarea);
+            actualizarListas();
+        }
+    }
     }
 
 
