@@ -1,5 +1,9 @@
 package listaTareas;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,13 +12,17 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
+@Entity
 public class Tarea implements Serializable {
+
+
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    int id;
     String tituloTarea;
     int progreso;
     String descripcionTarea;
 
-    public static int contadorId = 0;
-    int id = 0;
 
     Date fechaCreacion;
     Date fechaObjetivo;
@@ -73,8 +81,6 @@ public class Tarea implements Serializable {
         this.fechaCreacion = convertirStringFecha(fechaInicio);
         this.prioritaria = prioritaria;
         this.descripcionTarea = descripcionTarea;
-        this.id = ++contadorId;
-
     }
 
     public String getTituloTarea() {

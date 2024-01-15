@@ -1,7 +1,6 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory app:title="Visualización">
-
         <SwitchPreference
             app:key="tema"
             app:title="Tema"
@@ -14,39 +13,33 @@
             app:title="Tamaño de letra"
             app:entryValues="@array/fuente"
             app:entries="@array/fuente"
-            >
-        </ListPreference>
-
+            />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Ordenación">
         <ListPreference
             app:key="criterio"
             app:title="Criterio"
-            app:summary="Elite el criterio de ordenacion"
+            app:summary="Elige el criterio de ordenacion"
             app:entryValues="@array/criterio"
-            ></ListPreference>
+            app:entries="@array/criterio"
+            />
         <SwitchPreference
             android:icon="@drawable/baseline_sort_by_alpha_24"
             app:key="orden"
             app:title="Orden"
             app:summary="Ascendente o descendente"
             app:defaultValue="true"
-            >
-
-        </SwitchPreference>
-
+            />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Almacenamiento">
         <CheckBoxPreference
-            android:icon="@drawable/baseline_sd_storage_24"
-            app:defaultValue="false"
+            android:icon="@drawable/baseline_sd_card_24"
             android:key="tarjeta"
-            app:title="Almacenamiento en tarjeta SD"
+            app:defaultValue="false"
             app:summary=""
-            >
-        </CheckBoxPreference>
+            app:title="Almacenamiento en tarjeta SD"/>
         <EditTextPreference
             app:icon="@drawable/baseline_brush_24"
             app:title="Limpieza de archivos" />
@@ -66,7 +59,7 @@
         <EditTextPreference app:title="Contraseña" app:defaultValue="password"/>
     </PreferenceCategory>
     <PreferenceCategory app:title="Restablecer">
-        <Preference app:title="Restablecer"></Preference>
+        <Preference app:title="Restablecer"/>
     </PreferenceCategory>
 
 
