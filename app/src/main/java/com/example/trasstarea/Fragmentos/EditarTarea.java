@@ -53,7 +53,7 @@ public class EditarTarea extends AppCompatActivity
             tareaVieja = (Tarea) intent2.getSerializableExtra("tareaEditable");
 
             //Conversion de fechas
-
+            viewModel.setIdTarea(tareaVieja.getId());
             viewModel.setProgreso(tareaVieja.getProgreso());
             viewModel.setPrioritaria(tareaVieja.isPrioritaria());
             viewModel.setTituloTarea(tareaVieja.getTituloTarea());
@@ -113,6 +113,7 @@ public class EditarTarea extends AppCompatActivity
                 viewModel.getFechaInicio().getValue(),
                 viewModel.getFechaFinalizacion().getValue(),
                 viewModel.getDescripcionTarea().getValue());
+        nuevaTarea.setId(viewModel.getIdTarea().getValue());
 
         Intent intent = new Intent(this, ListadoActivity.class);
        if (tareaVieja != null){

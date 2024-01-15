@@ -14,8 +14,6 @@ import java.util.concurrent.TimeUnit;
 
 @Entity
 public class Tarea implements Serializable {
-
-
     @PrimaryKey(autoGenerate = true)
     @NonNull
     int id;
@@ -29,6 +27,9 @@ public class Tarea implements Serializable {
     boolean prioritaria;
     String diasRestantes;
 
+
+
+    public Tarea (){};
 
     public String getDescripcionTarea() {
         return descripcionTarea;

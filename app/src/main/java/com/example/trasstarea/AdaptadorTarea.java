@@ -21,16 +21,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import listaTareas.Tarea;
 
 public class AdaptadorTarea extends RecyclerView.Adapter implements View.OnCreateContextMenuListener {
-    private ArrayList<Tarea> datos;
+    private List<Tarea> datos;
     Context contexto;
 
     Tarea tarea;
 
-    public AdaptadorTarea(Context contexto,ArrayList<Tarea> datos) {
+    public AdaptadorTarea(Context contexto, List<Tarea> datos) {
         this.datos = datos;
         this.contexto = contexto;
     }

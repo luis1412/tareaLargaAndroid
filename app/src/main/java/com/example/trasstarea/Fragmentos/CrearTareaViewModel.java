@@ -10,6 +10,8 @@ import listaTareas.Tarea;
 
 public class CrearTareaViewModel extends ViewModel {
 
+
+    private final MutableLiveData<Integer> idTarea = new MutableLiveData<>();
     private final MutableLiveData<String> tituloTarea = new MutableLiveData<>();
     private final MutableLiveData<Boolean> tareaPrioritaria = new MutableLiveData<>();
     private final MutableLiveData<String> descripcionTarea = new MutableLiveData<>();
@@ -20,6 +22,7 @@ public class CrearTareaViewModel extends ViewModel {
 
 
 
+public void setIdTarea(Integer idTarea) {this.idTarea.setValue(idTarea);}
 public void setTituloTarea(String tituloTarea)
 {
     this.tituloTarea.setValue(tituloTarea);
@@ -44,6 +47,8 @@ public void setFechaFinalizacion(String fechaFinalizacion)
 {
     this.progreso.setValue(progreso);
 }
+
+        public MutableLiveData<Integer> getIdTarea() {return idTarea; }
         public MutableLiveData<String> getTituloTarea() {
             return tituloTarea;
         }
