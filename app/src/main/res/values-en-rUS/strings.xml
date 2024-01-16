@@ -33,4 +33,9 @@
     <string name="casiFinalizada">Almost Finished</string>
     <string name="finalizada">Finished</string>
     <string name="preferencias">Preferencias</string>
+    <string name="documento">Documento</string>
+    <string name="imagen">Imagen</string>
+    <string name="audio">Audio</string>
+    <string name="video">Video</string>
+    <string name="adjuntar">Adjuntar</string>
 </resources>

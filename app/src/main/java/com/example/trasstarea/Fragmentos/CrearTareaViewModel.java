@@ -20,9 +20,20 @@ public class CrearTareaViewModel extends ViewModel {
     private final MutableLiveData<Integer> progreso = new MutableLiveData<>();
     private final MutableLiveData<Tarea> tareaEditable = new MutableLiveData<>();
 
+    private final MutableLiveData<String> rutaImagen = new MutableLiveData<>();
+    private final MutableLiveData<String> rutaAudio = new MutableLiveData<>();
+    private final MutableLiveData<String> rutaDocumento = new MutableLiveData<>();
+    private final MutableLiveData<String> rutaVideo = new MutableLiveData<>();
 
 
-public void setIdTarea(Integer idTarea) {this.idTarea.setValue(idTarea);}
+
+
+  public void setRutaVideo(String rutaVideo) {this.rutaVideo.setValue(rutaVideo);}
+  public void setRutaAudio(String rutaAudio) {this.rutaAudio.setValue(rutaAudio);}
+  public void setRutaDocumento(String rutaDocumento) {this.rutaDocumento.setValue(rutaDocumento);}
+  public void setRutaImagen(String rutaImagen) {this.rutaImagen.setValue(rutaImagen);}
+
+    public void setIdTarea(Integer idTarea) {this.idTarea.setValue(idTarea);}
 public void setTituloTarea(String tituloTarea)
 {
     this.tituloTarea.setValue(tituloTarea);
@@ -59,6 +70,10 @@ public void setFechaFinalizacion(String fechaFinalizacion)
         public MutableLiveData<Boolean> getTareaPrioritaria() {return tareaPrioritaria;}
         public MutableLiveData<String> getFechaInicio() {return fechaInicio;}
         public MutableLiveData<String> getFechaFinalizacion() {return fechaFinalizacion;}
+        public MutableLiveData<String> getRutaImagen() {return rutaImagen;}
+        public MutableLiveData<String> getRutaAudio() {return rutaAudio;}
+        public MutableLiveData<String> getRutaDocumento() {return rutaDocumento;}
+        public MutableLiveData<String> getRutaVideo() {return rutaVideo;}
         public MutableLiveData<Integer> getProgreso() {
                 return progreso;
         }

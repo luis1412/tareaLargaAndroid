@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -16,6 +17,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -97,8 +99,27 @@ private boolean esFavorita = false;
             }
 
             public void actualizarListas(){
-                listaTareas = appDatabase.daoTarea().obtenerTareas();
-                listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();
+                SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(this);
+                String criterio = a.getString("criterio", "Alfabético");
+
+                switch (criterio){
+                    case "Alfabético":
+                        listaTareas = appDatabase.daoTarea().obtenerTareasAlfabeticas();
+                        listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();
+                        break;
+                    case "Fecha de creación":
+                        listaTareas = appDatabase.daoTarea().obtenerTareasFecha();
+                        listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();
+                        break;
+                    case "Días restantes":
+                        listaTareas = appDatabase.daoTarea().obtenerTareasDias();
+                        listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();
+                        break;
+                    case "Progreso":
+                        listaTareas = appDatabase.daoTarea().obtenerTareasProgreso();
+                        listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();
+                        break;
+                }
                 reciclerView(!esFavorita ? listaTareas : listaTareasPrioritarias);
             }
 
@@ -110,6 +131,11 @@ private boolean esFavorita = false;
         actualizarListas();
         cambiarFavorito();
         verificarTareaVacia();
+
+
+
+
+
         }
 
         public void anadirTareaBD(Tarea tarea){

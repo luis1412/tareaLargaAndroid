@@ -48,5 +48,11 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="preferencias">Preferencias</string>
+    <string name="documento">Documento</string>
+    <string name="imagen">Imagen</string>
+    <string name="audio">Audio</string>
+    <string name="video">Video</string>
+    <string name="adjuntar">Adjuntar</string>
+    <string name="descripcion">Descripcion</string>
 
 </resources>

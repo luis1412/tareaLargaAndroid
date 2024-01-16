@@ -23,6 +23,10 @@ public class Tarea implements Serializable {
     int progreso;
     String descripcionTarea;
 
+    String rutaImagen;
+    String rutaDocumento;
+    String rutaVideo;
+    String rutaAudio;
     @NonNull
     Date fechaCreacion;
     @NonNull
@@ -31,6 +35,50 @@ public class Tarea implements Serializable {
     String diasRestantes;
 
 
+    public Tarea(@NonNull String tituloTarea, int progreso, String descripcionTarea, String rutaImagen, String rutaDocumento, String rutaVideo, String rutaAudio, String fechaCreacion, String fechaObjetivo, boolean prioritaria) {
+        this.tituloTarea = tituloTarea;
+        this.progreso = progreso;
+        this.descripcionTarea = descripcionTarea;
+        this.rutaImagen = rutaImagen;
+        this.rutaDocumento = rutaDocumento;
+        this.rutaVideo = rutaVideo;
+        this.rutaAudio = rutaAudio;
+        this.fechaObjetivo = convertirStringFecha(fechaObjetivo);
+        this.fechaCreacion = convertirStringFecha(fechaCreacion);
+        this.prioritaria = prioritaria;
+    }
+
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
+    }
+
+    public String getRutaDocumento() {
+        return rutaDocumento;
+    }
+
+    public void setRutaDocumento(String rutaDocumento) {
+        this.rutaDocumento = rutaDocumento;
+    }
+
+    public String getRutaVideo() {
+        return rutaVideo;
+    }
+
+    public void setRutaVideo(String rutaVideo) {
+        this.rutaVideo = rutaVideo;
+    }
+
+    public String getRutaAudio() {
+        return rutaAudio;
+    }
+
+    public void setRutaAudio(String rutaAudio) {
+        this.rutaAudio = rutaAudio;
+    }
 
     public Tarea (){};
 

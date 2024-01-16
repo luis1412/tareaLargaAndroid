@@ -7,5 +7,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorDelete">#FF0000</color>
-
+    <color name="colorPrimary2">#2196F3</color>
+    <color name="colorSecondary">#FFC107</color>
 </resources>

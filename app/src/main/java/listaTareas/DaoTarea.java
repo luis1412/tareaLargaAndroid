@@ -24,5 +24,17 @@ public interface DaoTarea {
     @Query("DELETE FROM tarea WHERE id = :id")
     void borrarTarea(int id);
 
+    @Query("SELECT * FROM tarea ORDER BY tituloTarea")
+    List<Tarea> obtenerTareasAlfabeticas();
+
+    @Query("SELECT * FROM tarea ORDER BY fechaCreacion")
+    List<Tarea> obtenerTareasFecha();
+
+    @Query("SELECT * FROM tarea ORDER BY diasRestantes")
+    List<Tarea> obtenerTareasDias();
+
+    @Query("SELECT * FROM tarea ORDER BY progreso")
+    List<Tarea> obtenerTareasProgreso();
+
 
 }
