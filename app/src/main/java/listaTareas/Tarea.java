@@ -1,5 +1,9 @@
 package listaTareas;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,19 +12,75 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
+@Entity
 public class Tarea implements Serializable {
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    int id;
+    @NonNull
     String tituloTarea;
+    @NonNull
     int progreso;
     String descripcionTarea;
 
-    public static int contadorId = 0;
-    int id = 0;
-
+    String rutaImagen;
+    String rutaDocumento;
+    String rutaVideo;
+    String rutaAudio;
+    @NonNull
     Date fechaCreacion;
+    @NonNull
     Date fechaObjetivo;
     boolean prioritaria;
     String diasRestantes;
 
+
+    public Tarea(@NonNull String tituloTarea, int progreso, String descripcionTarea, String rutaImagen, String rutaDocumento, String rutaVideo, String rutaAudio, String fechaCreacion, String fechaObjetivo, boolean prioritaria) {
+        this.tituloTarea = tituloTarea;
+        this.progreso = progreso;
+        this.descripcionTarea = descripcionTarea;
+        this.rutaImagen = rutaImagen;
+        this.rutaDocumento = rutaDocumento;
+        this.rutaVideo = rutaVideo;
+        this.rutaAudio = rutaAudio;
+        this.fechaObjetivo = convertirStringFecha(fechaObjetivo);
+        this.fechaCreacion = convertirStringFecha(fechaCreacion);
+        this.prioritaria = prioritaria;
+    }
+
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
+    }
+
+    public String getRutaDocumento() {
+        return rutaDocumento;
+    }
+
+    public void setRutaDocumento(String rutaDocumento) {
+        this.rutaDocumento = rutaDocumento;
+    }
+
+    public String getRutaVideo() {
+        return rutaVideo;
+    }
+
+    public void setRutaVideo(String rutaVideo) {
+        this.rutaVideo = rutaVideo;
+    }
+
+    public String getRutaAudio() {
+        return rutaAudio;
+    }
+
+    public void setRutaAudio(String rutaAudio) {
+        this.rutaAudio = rutaAudio;
+    }
+
+    public Tarea (){};
 
     public String getDescripcionTarea() {
         return descripcionTarea;
@@ -73,8 +133,6 @@ public class Tarea implements Serializable {
         this.fechaCreacion = convertirStringFecha(fechaInicio);
         this.prioritaria = prioritaria;
         this.descripcionTarea = descripcionTarea;
-        this.id = ++contadorId;
-
     }
 
     public String getTituloTarea() {

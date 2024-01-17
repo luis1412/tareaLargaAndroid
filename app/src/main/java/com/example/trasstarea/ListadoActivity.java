@@ -8,14 +8,16 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -26,37 +28,29 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.trasstarea.Data.AppDatabase;
 import com.example.trasstarea.Fragmentos.CrearTareaActivity;
-import com.example.trasstarea.Fragmentos.CrearTareaViewModel;
 import com.example.trasstarea.Fragmentos.EditarTarea;
 
 import java.util.ArrayList;
-import java.util.OptionalInt;
-import java.util.stream.IntStream;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import listaTareas.Tarea;
 
 public class ListadoActivity extends AppCompatActivity {
-private ArrayList<Tarea> listaTareas = new ArrayList<>();
+private List<Tarea> listaTareas = new ArrayList<>();
+private List<Tarea> listaTareasPrioritarias = new ArrayList<>();
 
 TextView txInvisible;
 
 private boolean esFavorita = false;
 
-private ArrayList<Tarea> listaTareasPrioritarias = new ArrayList<>();
     AdaptadorTarea adaptador;
 
+    AppDatabase appDatabase;
 
-public void inicializarListaPrioritarias(){
-    listaTareasPrioritarias.clear();
-    for (Tarea a : listaTareas) {
-        if (a.isPrioritaria()){
-            listaTareasPrioritarias.add(a);
-        }
-    }
-
-
-}
     private RecyclerView rv;
    // private Button btCerrar;
 
@@ -72,22 +66,18 @@ public void inicializarListaPrioritarias(){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
                     if (!editar) {
                         listaTareas.add(tarea);
+                        anadirTareaBD(tarea);
                     }
                     else{
                         int contador = 0;
                         int key=0;
-                        Tarea tareaBorrar = (Tarea) intent.getSerializableExtra("tareaVieja");
-                        for (Tarea lista: listaTareas ) {
-                            if ( lista.getId() == tareaBorrar.getId()){
-                                key = contador;
-                          }
-                            contador++;
-                        }
-                       listaTareas.set(key, tarea);
+                        //Tarea tareaBorrar = (Tarea) intent.getSerializableExtra("tareaVieja");
+                        Executor executor = Executors.newSingleThreadExecutor();
+                        executor.execute(new ActualizarTarea(tarea));
                     }
                     }
-                verificarTareaVacia();
-               adaptador.notifyDataSetChanged();
+                    verificarTareaVacia();
+                    adaptador.notifyDataSetChanged();
             }
 
         }
@@ -108,29 +98,63 @@ public void inicializarListaPrioritarias(){
 
             }
 
+            public void actualizarListas(){
+                SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(this);
+                String criterio = a.getString("criterio", "Alfabético");
+
+                switch (criterio){
+                    case "Alfabético":
+                        listaTareas = appDatabase.daoTarea().obtenerTareasAlfabeticas();
+                        listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();
+                        break;
+                    case "Fecha de creación":
+                        listaTareas = appDatabase.daoTarea().obtenerTareasFecha();
+                        listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();
+                        break;
+                    case "Días restantes":
+                        listaTareas = appDatabase.daoTarea().obtenerTareasDias();
+                        listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();
+                        break;
+                    case "Progreso":
+                        listaTareas = appDatabase.daoTarea().obtenerTareasProgreso();
+                        listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();
+                        break;
+                }
+                reciclerView(!esFavorita ? listaTareas : listaTareasPrioritarias);
+            }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado);
-        init();
+        appDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "tareasDB").allowMainThreadQueries().build();
+        actualizarListas();
         cambiarFavorito();
         verificarTareaVacia();
+
+
+
+
+
         }
 
+        public void anadirTareaBD(Tarea tarea){
+            Executor executor = Executors.newSingleThreadExecutor();
+            executor.execute(new CrearTarea(tarea));
+        }
 
         public void cambiarFavorito(){
             if (!esFavorita){
                 reciclerView(listaTareas);
             }
             else{
-                inicializarListaPrioritarias();
                 reciclerView(listaTareasPrioritarias);
             }
             verificarTareaVacia();
         }
 
 
-        public void reciclerView(ArrayList<Tarea> listaTareas){
+        public void reciclerView(List<Tarea> listaTareas){
             //Creamos el adaptador
             adaptador = new AdaptadorTarea(this, listaTareas);
             //Vinculamos el objeto java RecyclerView con el objeto correspondiente en el layout
@@ -172,7 +196,11 @@ public void inicializarListaPrioritarias(){
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 int indiceTareaBorrar =  listaTareas.indexOf(a);
-                listaTareas.remove(indiceTareaBorrar);
+                Executor executor = Executors.newSingleThreadExecutor();
+                executor.execute(new BorrarTarea(listaTareas.get(indiceTareaBorrar)));
+
+               // appDatabase.daoTarea().borrarTarea();
+                //listaTareas.remove(indiceTareaBorrar);
                 adaptador.notifyDataSetChanged();
                 verificarTareaVacia();
             }
@@ -267,23 +295,44 @@ public void inicializarListaPrioritarias(){
     }
 
 
-    public void init() {
-
-            listaTareas.add(new Tarea("Hacer tarta", 50, true, "24/04/2023", "24/11/2024","La receta es secreta"));
-            listaTareas.add(new Tarea("Hacer Tarea", 20, true , "24/04/2023", "24/11/2025", "Android es demasiado dificil"));
-            listaTareas.add(new Tarea("Programar C#", 80, false, "24/04/2023", "24/11/2021", "Programar es dificl"));
-            listaTareas.add(new Tarea("Ir al banco", 0, true, "24/04/2023", "24/11/2022","Me estoy quedando pobre"));
-            listaTareas.add(new Tarea("LLamar abuelo" , 50, false, "24/04/2023", "24/11/2025","Otra vez q no se me olvide"));
-            listaTareas.add(new Tarea("Comprar esponja", 0, true, "24/04/2023", "24/11/2023","Que los paltos no se friegan solos"));
-            listaTareas.add(new Tarea("Comprar friegosuelos", 0 , false,"24/04/2023", "24/11/2021", "El suelo huele mal"));
-            listaTareas.add(new Tarea("Sacar la basura", 0, false,"24/04/2023", "24/01/2024", "Lleva 1 años sin sacarse"));
-            listaTareas.add(new Tarea("ReciclerView" ,  50, true,"24/04/2023", "24/12/2023", "2 semana para hacerlo"));
-            listaTareas.add(new Tarea("Hacer bizcocho", 50, true, "24/04/2023", "24/12/2023","Pero sin azucar que enngorda"));
-            inicializarListaPrioritarias();
-
+    class BorrarTarea implements Runnable {
+        private Tarea tarea;
+        public BorrarTarea(Tarea tarea) {
+            this.tarea = tarea;
         }
-
-
+        @Override
+        public void run() {
+            appDatabase.daoTarea().borrarTarea(tarea.getId());
+            actualizarListas();
+        }
+    }
+    class ActualizarTarea implements Runnable {
+        private Tarea tarea;
+        public ActualizarTarea(Tarea tarea) {
+            this.tarea = tarea;
+        }
+        @Override
+        public void run() {
+            appDatabase.daoTarea().actualizarTarea(tarea.getTituloTarea(),tarea.getProgreso(),
+                    tarea.isPrioritaria(),
+                    tarea.getFechaCreacion(),
+                    tarea.getFechaObjetivo(),
+                    tarea.getDescripcionTarea(),
+                    tarea.getId());
+            actualizarListas();
+        }
+    }
+    class CrearTarea implements Runnable {
+        private Tarea tarea;
+        public CrearTarea(Tarea tarea) {
+            this.tarea = tarea;
+        }
+        @Override
+        public void run() {
+            appDatabase.daoTarea().insertarTarea(tarea);
+            actualizarListas();
+        }
+    }
     }
 
 

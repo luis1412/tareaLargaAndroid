@@ -1,6 +1,7 @@
 package com.example.trasstarea;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
@@ -38,10 +39,11 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(this);
         boolean b = a.getBoolean("tema", true);
         if (b){
-
-
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
         return super.getTheme();
-
     }
 }

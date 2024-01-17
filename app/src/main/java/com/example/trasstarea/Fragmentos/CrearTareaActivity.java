@@ -84,10 +84,14 @@ public class CrearTareaActivity extends AppCompatActivity
     public void onBotonGuardaClicked() {
         Tarea nuevaTarea = new Tarea(viewModel.getTituloTarea().getValue(),
                 viewModel.getProgreso().getValue(),
-                viewModel.getTareaPrioritaria().getValue(),
+                viewModel.getDescripcionTarea().getValue(),
+                viewModel.getRutaImagen().getValue(),
+                viewModel.getRutaDocumento().getValue(),
+                viewModel.getRutaVideo().getValue(),
+                viewModel.getRutaAudio().getValue(),
                 viewModel.getFechaInicio().getValue(),
                 viewModel.getFechaFinalizacion().getValue(),
-                viewModel.getDescripcionTarea().getValue());
+                viewModel.getTareaPrioritaria().getValue());
         Intent intent = new Intent(this, ListadoActivity.class);
         intent.putExtra("editable", false);
         intent.putExtra("tarea", nuevaTarea);
