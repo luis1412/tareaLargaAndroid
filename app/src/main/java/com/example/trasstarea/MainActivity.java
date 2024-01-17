@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public Resources.Theme getTheme() {
         SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean b = a.getBoolean("tema", true);
+        boolean b = a.getBoolean("tema", false);
         if (b){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }

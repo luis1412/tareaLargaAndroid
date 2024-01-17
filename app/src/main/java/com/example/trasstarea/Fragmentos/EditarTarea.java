@@ -61,6 +61,9 @@ public class EditarTarea extends AppCompatActivity
             viewModel.setFechaInicio(tareaVieja.getfechaString(tareaVieja.getFechaCreacion()));
             viewModel.setDescripcionTarea(tareaVieja.getDescripcionTarea());
             viewModel.setRutaImagen(tareaVieja.getRutaImagen());
+            viewModel.setRutaDocumento(tareaVieja.getRutaDocumento());
+            viewModel.setRutaVideo(tareaVieja.getRutaVideo());
+            viewModel.setRutaAudio(tareaVieja.getRutaAudio());
         }
 
 

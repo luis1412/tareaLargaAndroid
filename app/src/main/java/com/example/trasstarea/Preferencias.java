@@ -62,7 +62,20 @@ public class Preferencias extends AppCompatActivity {
             ListPreference tamanoLetra = findPreference("fuente");
             SwitchPreference temaOscuro = findPreference("tema");
             ListPreference criterio = findPreference("criterio");
+            SwitchPreference ordenacion = findPreference("ordenacion");
 
+            if (ordenacion != null){
+                ordenacion.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                        boolean marcado = (boolean) newValue;
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext().getApplicationContext());
+                        sharedPreferences.edit().putBoolean("ordenacion", marcado).apply();
+                        return true;
+
+                    }
+                });
+            }
 
             if (criterio != null){
 

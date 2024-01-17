@@ -39,9 +39,9 @@ import java.util.Objects;
  * create an instance of this fragment.
  */
 public class FragmentDos extends Fragment {
-    Button  btIr1, btGuardar, cargarImagen;
+    Button  btIr1, btGuardar, cargarImagen, cargarDocumento, cargarAudio, cargarVideo;
     EditText descripcionTarea;
-
+    public int caso = 0;
     String rutaImagen, rutaDocumento, rutaAudio, rutaVideo;
 
     public static final int REQUEST_CODE_SELECT_IMAGE = 1;
@@ -88,13 +88,13 @@ public class FragmentDos extends Fragment {
         btIr1.setOnClickListener(view -> comunicador2.onBotonIr1Clicked());
         descripcionTarea = fragmento2.findViewById(R.id.descripcionTarea);
         cargarImagen = fragmento2.findViewById(R.id.botonImagen);
-
+        cargarDocumento = fragmento2.findViewById(R.id.botonDocumento);
+        cargarAudio = fragmento2.findViewById(R.id.botonAudio);
+        cargarVideo = fragmento2.findViewById(R.id.botonVideo);
 
         if (viewModel.getDescripcionTarea() != null){
             descripcionTarea.setText(viewModel.getDescripcionTarea().getValue());
         }
-
-
         btGuardar = fragmento2.findViewById(R.id.boton_Guardar);
         btGuardar.setOnClickListener(view -> {
             viewModel.setDescripcionTarea(descripcionTarea.getText().toString());
@@ -112,23 +112,87 @@ public class FragmentDos extends Fragment {
             }
         });
 
+
+        cargarAudio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cargarAudio();
+            }
+        });
+
+        cargarVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cargarVideo();
+            }
+        });
+
+        cargarDocumento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cargarDocumento();
+            }
+        });
+
+
         if (viewModel.getRutaImagen() != null){
-            cargarImagen.setText(viewModel.getRutaImagen().getValue());
+            String rutaImagen = viewModel.getRutaImagen().getValue();
+            cargarImagen.setText(rutaImagen);
             rutaImagen = viewModel.getRutaImagen().getValue();
         }
+        if (viewModel.getRutaAudio() != null){
+            String rutaAudio = viewModel.getRutaAudio().getValue();
+            cargarAudio.setText(rutaAudio);
+            rutaAudio = viewModel.getRutaAudio().getValue();
+        }
+        if (viewModel.getRutaVideo() != null){
+            String rutaVideo = viewModel.getRutaVideo().getValue();
+            cargarVideo.setText(rutaVideo);
+            rutaVideo = viewModel.getRutaVideo().getValue();
+        }
+        if (viewModel.getRutaDocumento() != null){
+            String rutaDocumento = viewModel.getRutaDocumento().getValue();
+            cargarDocumento.setText(rutaDocumento);
+            rutaDocumento = viewModel.getRutaDocumento().getValue();
+        }
+
+
         return fragmento2;
     }
 
     public void cargarFoto(){
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("image/*");
+        caso = 1;
         startActivityForResult(i,REQUEST_CODE_SELECT_IMAGE);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Uri imageUri = data.getData();
+    public void cargarDocumento(){
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.setType("application/*");
+        caso = 2;
+        startActivityForResult(i,REQUEST_CODE_SELECT_IMAGE);
 
+    }
+    public void cargarVideo(){
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.setType("video/*");
+        caso = 4;
+        startActivityForResult(i,REQUEST_CODE_SELECT_IMAGE);
+
+    }
+    public void cargarAudio(){
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.setType("audio/*");
+        caso = 3;
+        startActivityForResult(i,REQUEST_CODE_SELECT_IMAGE);
+
+    }
+
+
+
+    public void escribirArchivos(Intent data, int caso){
+        Uri imageUri = data.getData();
         // Guarda la imagen en el almacenamiento interno del dispositivo
         File imageFile = new File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), imageUri.getLastPathSegment());
         try {
@@ -143,12 +207,36 @@ public class FragmentDos extends Fragment {
             outputStream.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
-    } catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        switch (caso){
+            case 1:
+                rutaImagen = imageFile.getName();
+                cargarImagen.setText(rutaImagen);
+                break;
+            case 2:
+                rutaDocumento = imageFile.getName();
+                cargarDocumento.setText(rutaDocumento);
+                break;
+            case 3:
+                rutaAudio = imageFile.getName();
+                cargarAudio.setText(rutaAudio);
+                break;
+            case 4:
+                rutaVideo = imageFile.getName();
+                cargarVideo.setText(rutaVideo);
+                break;
+        }
 
-        cargarImagen.setText(imageFile.getAbsolutePath());
-        rutaImagen = imageFile.getAbsolutePath();
 
+
+
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        escribirArchivos(data, caso);
     }
 }

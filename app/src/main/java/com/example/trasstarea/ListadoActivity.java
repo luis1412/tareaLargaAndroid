@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
@@ -20,6 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,13 +35,14 @@ import com.example.trasstarea.Fragmentos.CrearTareaActivity;
 import com.example.trasstarea.Fragmentos.EditarTarea;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import listaTareas.Tarea;
 
-public class ListadoActivity extends AppCompatActivity {
+public class ListadoActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 private List<Tarea> listaTareas = new ArrayList<>();
 private List<Tarea> listaTareasPrioritarias = new ArrayList<>();
 
@@ -98,10 +101,28 @@ private boolean esFavorita = false;
 
             }
 
-            public void actualizarListas(){
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, @Nullable String key) {
+                if (key.equals("criterio")){
+                    actualizarListas();
+                }
+                if (key.equals("ordenacion")) {
+                    cambiarOrdenListas();
+                }
+    }
+
+    public void cambiarOrdenListas(){
+        Collections.reverse(listaTareas);
+        Collections.reverse(listaTareasPrioritarias);
+        reciclerView(!esFavorita ? listaTareas : listaTareasPrioritarias);
+        adaptador.notifyDataSetChanged();
+    }
+
+
+    public void actualizarListas(){
                 SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(this);
                 String criterio = a.getString("criterio", "Alfabético");
-
                 switch (criterio){
                     case "Alfabético":
                         listaTareas = appDatabase.daoTarea().obtenerTareasAlfabeticas();
@@ -121,6 +142,14 @@ private boolean esFavorita = false;
                         break;
                 }
                 reciclerView(!esFavorita ? listaTareas : listaTareasPrioritarias);
+                adaptador.notifyDataSetChanged();
+            }
+            public void comprobarOrdenInicio(){
+              SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(this);
+              boolean ordenacion = a.getBoolean("ordenacion", true);
+                if (ordenacion){
+                    cambiarOrdenListas();
+                }
             }
 
     @Override
@@ -131,11 +160,9 @@ private boolean esFavorita = false;
         actualizarListas();
         cambiarFavorito();
         verificarTareaVacia();
-
-
-
-
-
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        comprobarOrdenInicio();
         }
 
         public void anadirTareaBD(Tarea tarea){
@@ -293,7 +320,6 @@ private boolean esFavorita = false;
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
 
     class BorrarTarea implements Runnable {
         private Tarea tarea;
