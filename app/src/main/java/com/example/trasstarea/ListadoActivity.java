@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -192,6 +193,7 @@ private boolean esFavorita = false;
             SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(this);
 
             String numeroDias2 = a.getString("limpieza", "0");
+            boolean sdPreference = a.getBoolean("tarjeta", false);
 
             if (numeroDias2 != null){
 
@@ -206,6 +208,9 @@ private boolean esFavorita = false;
 
 
             if (numeroDias != 0){
+                // La funcion de que borre la SD no he conseguido hacerla porque no se pone la ruta que es no se porque
+                // Mientras que en el fragmento 2 si coge la ruta bien
+              // File ficheroInterno = sdPreference ? Environment.getExternalStorageDirectory() : getExternalFilesDir(Environment.DIRECTORY_PICTURES);
                File ficheroInterno = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
                 File[] archivos = ficheroInterno.listFiles();
                 if (archivos != null) {
