@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.CheckBoxPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -63,6 +64,21 @@ public class Preferencias extends AppCompatActivity {
             SwitchPreference temaOscuro = findPreference("tema");
             ListPreference criterio = findPreference("criterio");
             SwitchPreference ordenacion = findPreference("ordenacion");
+            CheckBoxPreference tarjetaSd = findPreference("tarjeta");
+
+            if (tarjetaSd != null){
+                tarjetaSd.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                        boolean marcado = (boolean) newValue;
+                        Context applicationContext = requireContext().getApplicationContext();
+                        guardarEstadoSd(applicationContext, marcado);
+                        return true;
+                    }
+                });
+
+            }
+
 
             if (ordenacion != null){
                 ordenacion.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -164,6 +180,10 @@ public class Preferencias extends AppCompatActivity {
         private void guardarEstadoTema(Context context, boolean isDarkThemeEnabled) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPreferences.edit().putBoolean("tema", isDarkThemeEnabled).apply();
+        }
+        private void guardarEstadoSd(Context context, boolean sdEnabled) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            sharedPreferences.edit().putBoolean("tarjeta", sdEnabled).apply();
         }
 
         private void guardarEstadoFuente(Context context, String estado) {

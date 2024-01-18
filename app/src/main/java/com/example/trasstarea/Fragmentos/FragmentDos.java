@@ -2,6 +2,7 @@ package com.example.trasstarea.Fragmentos;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 
 import android.os.Environment;
 import android.text.Editable;
@@ -190,11 +192,19 @@ public class FragmentDos extends Fragment {
     }
 
 
+    public boolean existeSD(){
+        String estado = Environment.getExternalStorageState();
+        //El primer parametro devuelve true si esta disponible la tarjeta SD, y el segundo si se puede escribir en ella
+        return Environment.MEDIA_MOUNTED.equals(estado) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(estado);
+
+    }
 
     public void escribirArchivos(Intent data, int caso){
         Uri imageUri = data.getData();
-        // Guarda la imagen en el almacenamiento interno del dispositivo
-        File imageFile = new File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), imageUri.getLastPathSegment());
+        SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(getContext());
+        File directorioImagenesAlmacenamientoInterno = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        boolean b = a.getBoolean("tarjeta", false);
+        File imageFile = new File(b ? (existeSD() ? Environment.getExternalStorageDirectory().getAbsoluteFile() : directorioImagenesAlmacenamientoInterno): directorioImagenesAlmacenamientoInterno, imageUri.getLastPathSegment());
         try {
             InputStream inputStream =  getContext().getContentResolver().openInputStream(imageUri);
             OutputStream outputStream = new FileOutputStream(imageFile);
