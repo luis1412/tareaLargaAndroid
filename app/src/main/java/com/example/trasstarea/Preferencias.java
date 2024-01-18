@@ -14,6 +14,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.CheckBoxPreference;
+import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -38,6 +39,10 @@ public class Preferencias extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+
+
+
 
 
         preferencias = PreferenceManager.getDefaultSharedPreferences(this);
@@ -65,6 +70,24 @@ public class Preferencias extends AppCompatActivity {
             ListPreference criterio = findPreference("criterio");
             SwitchPreference ordenacion = findPreference("ordenacion");
             CheckBoxPreference tarjetaSd = findPreference("tarjeta");
+            EditTextPreference limpieza = findPreference("limpieza");
+
+            //Establecemos que solo se puedan introducir numeros
+            if (limpieza != null) {
+                limpieza.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+                });
+
+                limpieza.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                        String numero = (String) newValue;
+                        Context applicationContext = requireContext().getApplicationContext();
+                        guardarEstadoLimpieza(applicationContext, numero);
+                        return true;
+                    }
+                });
+            }
 
             if (tarjetaSd != null){
                 tarjetaSd.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -175,6 +198,10 @@ public class Preferencias extends AppCompatActivity {
         public void guardarEstadoCriterio(Context context, String estado){
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPreferences.edit().putString("criterio", estado).apply();
+        }
+        public void guardarEstadoLimpieza(Context context, String estado){
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            sharedPreferences.edit().putString("limpieza", estado).apply();
         }
 
         private void guardarEstadoTema(Context context, boolean isDarkThemeEnabled) {

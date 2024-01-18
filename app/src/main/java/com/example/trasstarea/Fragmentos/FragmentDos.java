@@ -33,6 +33,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Objects;
 
 /**
@@ -43,6 +46,9 @@ import java.util.Objects;
 public class FragmentDos extends Fragment {
     Button  btIr1, btGuardar, cargarImagen, cargarDocumento, cargarAudio, cargarVideo;
     EditText descripcionTarea;
+
+    int idTarea;
+
     public int caso = 0;
     String rutaImagen, rutaDocumento, rutaAudio, rutaVideo;
 
@@ -195,7 +201,7 @@ public class FragmentDos extends Fragment {
     public boolean existeSD(){
         String estado = Environment.getExternalStorageState();
         //El primer parametro devuelve true si esta disponible la tarjeta SD, y el segundo si se puede escribir en ella
-        return Environment.MEDIA_MOUNTED.equals(estado) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(estado);
+        return Environment.MEDIA_MOUNTED.equals(estado) && Environment.MEDIA_MOUNTED_READ_ONLY.equals(estado);
 
     }
 
@@ -204,7 +210,35 @@ public class FragmentDos extends Fragment {
         SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(getContext());
         File directorioImagenesAlmacenamientoInterno = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         boolean b = a.getBoolean("tarjeta", false);
-        File imageFile = new File(b ? (existeSD() ? Environment.getExternalStorageDirectory().getAbsoluteFile() : directorioImagenesAlmacenamientoInterno): directorioImagenesAlmacenamientoInterno, imageUri.getLastPathSegment());
+        Date fecha = new Date();
+        Calendar rightNow = Calendar.getInstance();
+        String dia = rightNow.get(Calendar.DAY_OF_MONTH) + "";
+        String mes = fecha.getMonth() + "";
+        String year = fecha.getYear() + "";
+
+        String tipo ="";
+        String formatoArchivo = "";
+        if (caso == 1){tipo = "IMG"; formatoArchivo = ".png";}
+        else if (caso == 2){tipo = "DOC"; formatoArchivo = ".pdf";}
+        else if (caso == 3){tipo = "AUD"; formatoArchivo = ".mp3";}
+        else if (caso == 4){tipo = "VID"; formatoArchivo = ".mp4";}
+
+        //FORMATO DE LOS ARCHIVOS PARA QUE A LA HORA DE BORRARLOS DEPENDIENDO DE LOS DIAS QUE SE HAYA PUESTO EN LA PREFERENCIA
+        //DEL SIMBOLO % HACIA DELANTE INDICA A LA FECHA DESDE OTRO LADO CONTROLAREMOS LA FECHA Y BORRAREMOS EN CASO DE QUE
+        //HAYAN PASADO LOS DIAS DE LA PREFERENCIA
+
+        String nombreArchivo = tipo+  "%" + imageUri.getLastPathSegment() + "%" + dia + mes + year + formatoArchivo;
+
+
+
+        File imageFile =
+                new File(b
+                        ? (existeSD()
+                        ?
+                        Environment.getExternalStorageDirectory().getAbsoluteFile()
+                        : directorioImagenesAlmacenamientoInterno)
+                        : directorioImagenesAlmacenamientoInterno,
+                        nombreArchivo);
         try {
             InputStream inputStream =  getContext().getContentResolver().openInputStream(imageUri);
             OutputStream outputStream = new FileOutputStream(imageFile);
@@ -243,7 +277,6 @@ public class FragmentDos extends Fragment {
 
 
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

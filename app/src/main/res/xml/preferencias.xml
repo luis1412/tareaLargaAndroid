@@ -41,8 +41,11 @@
             app:summary=""
             app:title="Almacenamiento en tarjeta SD"/>
         <EditTextPreference
+            android:key="limpieza"
             app:icon="@drawable/baseline_brush_24"
-            app:title="Limpieza de archivos" />
+            app:title="Limpieza de archivos"
+
+            />
 
         <SwitchPreference
             app:icon="@drawable/baseline_storage_24"

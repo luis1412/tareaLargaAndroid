@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.AttributeSet;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -34,11 +35,16 @@ import com.example.trasstarea.Data.AppDatabase;
 import com.example.trasstarea.Fragmentos.CrearTareaActivity;
 import com.example.trasstarea.Fragmentos.EditarTarea;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import listaTareas.Tarea;
 
@@ -163,6 +169,7 @@ private boolean esFavorita = false;
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         comprobarOrdenInicio();
+        limpiezaArchivos();
         }
 
         public void anadirTareaBD(Tarea tarea){
@@ -178,6 +185,67 @@ private boolean esFavorita = false;
                 reciclerView(listaTareasPrioritarias);
             }
             verificarTareaVacia();
+        }
+
+
+        public void limpiezaArchivos(){
+            SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(this);
+
+            String numeroDias2 = a.getString("limpieza", "0");
+
+            if (numeroDias2 != null){
+
+            int numeroDias = Integer.parseInt(numeroDias2);
+
+            Date fecha = new Date();
+            Calendar rightNow = Calendar.getInstance();
+            String dia = rightNow.get(Calendar.DAY_OF_MONTH) + "";
+            String mes = fecha.getMonth() + "";
+            String year = fecha.getYear() + "";
+
+
+
+            if (numeroDias != 0){
+               File ficheroInterno = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                File[] archivos = ficheroInterno.listFiles();
+                if (archivos != null) {
+                    for (File archivo : archivos) {
+                      String nombreArchivo = archivo.getName();
+                       Date fechaArchivo = stringAFecha(nombreArchivo);
+                       long dias = calcularDiferenciaFechas(fecha, fechaArchivo);
+                        if (dias >= numeroDias) {
+                            // Borrar el archivo
+                            if (archivo.delete()) {
+                                System.out.println("Archivo eliminado: " + archivo.getAbsolutePath());
+                            } else {
+                                System.err.println("No se pudo eliminar el archivo: " + archivo.getAbsolutePath());
+                            }
+                        }
+                    }
+                }
+            }
+            }
+        }
+        public long calcularDiferenciaFechas(Date fechaObjetivo, Date fechaACctual){
+            long diferenciaMillis = fechaObjetivo.getTime() - fechaACctual.getTime();
+            diferenciaMillis +=  2592000000L;
+            long diferenciaDias = TimeUnit.MILLISECONDS.toDays(diferenciaMillis);
+
+            return diferenciaDias;
+        }
+
+
+        public Date stringAFecha(String fecha){
+            String finalString = fecha.substring(fecha.length() - 10, fecha.length() - 4);
+            String[] a = finalString.split("");
+            String dia = a[0] + a[1];
+            String mes = a[2] + a[3];
+            String year =  a[4] + a[5];
+          int diaI = Integer.parseInt(dia);
+          int mesI = Integer.parseInt(mes);
+          int yearI = Integer.parseInt(year) + 100;
+          Date fechaFinal = new Date(yearI,mesI,diaI);
+          return fechaFinal;
         }
 
 
