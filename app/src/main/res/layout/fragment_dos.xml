@@ -6,98 +6,120 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Fragmentos.FragmentDos" >
+    tools:context=".Fragmentos.FragmentDos">
 
-    <EditText
-        android:id="@+id/descripcionTarea"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:text="@string/descripcion"
-        android:maxLines="10"
-        android:gravity="top|start"
-        />
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="161dp"
-        android:layout_marginTop="20dp"
-        android:gravity="start"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/boton_Volver"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/volver" />
-
-        <Button
-            android:id="@+id/boton_Guardar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/guardar" />
-    </LinearLayout>
-    <LinearLayout
-        android:textAlignment="center"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:orientation="vertical"
-        android:gravity="center">
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="162dp"
-            android:layout_height="wrap_content"
-            android:drawableRight="@drawable/baseline_attach_file_24"
-            android:text="@string/adjuntar"
-            android:textAlignment="center"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-
-        <Button
-            android:layout_margin="10dp"
-            android:id="@+id/botonDocumento"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/documento"
-            app:icon="@drawable/baseline_picture_as_pdf_24" />
+            android:orientation="vertical">
 
-        <Button
-            android:layout_margin="10dp"
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:text="Descripcion de la tarea"
+                android:textSize="24sp" />
 
-            android:id="@+id/botonImagen"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/imagen"
-            app:icon="@drawable/baseline_image_24" />
+            <EditText
+                android:id="@+id/descripcionTarea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:ems="10"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:maxLines="10"
+                android:text="@string/descripcion" />
 
-        <Button
-            android:layout_margin="10dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="161dp"
+                android:layout_marginTop="20dp"
+                android:gravity="start"
+                android:orientation="horizontal">
 
-            android:id="@+id/botonAudio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/audio"
-            app:icon="@drawable/baseline_audio_file_24" />
+                <Button
+                    android:id="@+id/boton_Volver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/volver" />
 
-        <Button
-            android:layout_margin="10dp"
-            android:id="@+id/botonVideo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/video"
-            app:icon="@drawable/baseline_video_file_24" />
-    </LinearLayout>
+                <Button
+                    android:id="@+id/boton_Guardar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/guardar" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:textAlignment="center">
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="162dp"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/baseline_attach_file_24"
+                    android:text="@string/adjuntar"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <Button
+                    android:id="@+id/botonDocumento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="@string/documento"
+                    app:icon="@drawable/baseline_picture_as_pdf_24" />
+
+                <Button
+                    android:id="@+id/botonImagen"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="@string/imagen"
+                    app:icon="@drawable/baseline_image_24" />
+
+                <Button
+                    android:id="@+id/botonAudio"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="@string/audio"
+                    app:icon="@drawable/baseline_audio_file_24" />
+
+                <Button
+                    android:id="@+id/botonVideo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="@string/video"
+                    app:icon="@drawable/baseline_video_file_24" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>
