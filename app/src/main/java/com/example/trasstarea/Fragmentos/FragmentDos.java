@@ -1,8 +1,11 @@
 package com.example.trasstarea.Fragmentos;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -36,6 +39,7 @@ import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -171,28 +175,64 @@ public class FragmentDos extends Fragment {
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("image/*");
         caso = 1;
-        startActivityForResult(i,REQUEST_CODE_SELECT_IMAGE);
+
+        // Verificar si hay aplicaciones que puedan manejar la acción
+        PackageManager packageManager = getActivity().getPackageManager();
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(i, 0);
+        boolean isIntentSafe = activities.size() > 0;
+
+        if (isIntentSafe) {
+            startActivityForResult(i, REQUEST_CODE_SELECT_IMAGE);
+        } else {
+            Toast.makeText(requireContext(), "No hay aplicaciones para manejar la acción", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void cargarDocumento(){
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("application/*");
         caso = 2;
-        startActivityForResult(i,REQUEST_CODE_SELECT_IMAGE);
+
+        // Verificar si hay aplicaciones que puedan manejar la acción
+        PackageManager packageManager = getActivity().getPackageManager();
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(i, 0);
+        boolean isIntentSafe = activities.size() > 0;
+
+        if (isIntentSafe) {
+            startActivityForResult(i, REQUEST_CODE_SELECT_IMAGE);
+        } else {
+            Toast.makeText(requireContext(), "No hay aplicaciones para manejar la acción", Toast.LENGTH_SHORT).show();
+        }
 
     }
     public void cargarVideo(){
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("video/*");
         caso = 4;
-        startActivityForResult(i,REQUEST_CODE_SELECT_IMAGE);
+
+        PackageManager packageManager = getActivity().getPackageManager();
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(i, 0);
+        boolean isIntentSafe = activities.size() > 0;
+
+        if (isIntentSafe) {
+            startActivityForResult(i, REQUEST_CODE_SELECT_IMAGE);
+        } else {
+            Toast.makeText(requireContext(), "No hay aplicaciones para manejar la acción", Toast.LENGTH_SHORT).show();
+        }
 
     }
     public void cargarAudio(){
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("audio/*");
         caso = 3;
-        startActivityForResult(i,REQUEST_CODE_SELECT_IMAGE);
+        PackageManager packageManager = getActivity().getPackageManager();
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(i, 0);
+        boolean isIntentSafe = activities.size() > 0;
+        if (isIntentSafe) {
+            startActivityForResult(i, REQUEST_CODE_SELECT_IMAGE);
+        } else {
+            Toast.makeText(requireContext(), "No hay aplicaciones para manejar la acción", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -272,13 +312,16 @@ public class FragmentDos extends Fragment {
                 break;
         }
 
-
-
-
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        escribirArchivos(data, caso);
+        if (requestCode == REQUEST_CODE_SELECT_IMAGE) {
+            if (resultCode == Activity.RESULT_OK) {
+                escribirArchivos(data, caso);
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Toast.makeText(requireContext(), "Selección de imagen cancelada", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

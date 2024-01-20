@@ -7,7 +7,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
-import android.widget.CheckBox;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -74,7 +73,7 @@ public class Preferencias extends AppCompatActivity {
             restablecer.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(@NonNull Preference preference) {
-                    reseteatPreferencias();
+                    resetearPreferencias();
                     Toast.makeText(requireContext(), "Reinicia la aplicacion para ver los cambios", Toast.LENGTH_SHORT).show();
                     return true;
                 }
@@ -227,14 +226,17 @@ public class Preferencias extends AppCompatActivity {
 
         }
 
-        private void reseteatPreferencias(){
+        private void resetearPreferencias(){
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+
             sharedPreferences.edit().putString("fuente", "Mediana").apply();
             sharedPreferences.edit().putBoolean("tarjeta", false).apply();
             sharedPreferences.edit().putBoolean("tema", false).apply();
             sharedPreferences.edit().putString("limpieza", "0").apply();
             sharedPreferences.edit().putString("criterio", "Alfabético").apply();
             sharedPreferences.edit().putBoolean("ordenacion", false).apply();
+
+            getActivity().recreate();
         }
 
     }

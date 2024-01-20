@@ -138,7 +138,6 @@ private boolean esFavorita = false;
         adaptador.notifyDataSetChanged();
     }
 
-
     public void actualizarListas(){
                 SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(this);
                 String criterio = a.getString("criterio", "Alfabético");
@@ -170,7 +169,6 @@ private boolean esFavorita = false;
                     cambiarOrdenListas();
                 }
             }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -464,7 +462,6 @@ private boolean esFavorita = false;
         }
         return super.getTheme();
     }
-
 
     }
 
