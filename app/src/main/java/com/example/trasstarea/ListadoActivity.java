@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.trasstarea.Data.AppDatabase;
+import com.example.trasstarea.Detalles.Detalles;
 import com.example.trasstarea.Fragmentos.CrearTareaActivity;
 import com.example.trasstarea.Fragmentos.EditarTarea;
 
@@ -338,6 +339,10 @@ private boolean esFavorita = false;
             verificarTareaVacia();
             }
          else if (item.getItemId()== R.id.descripcion) {
+            Intent iVista = new Intent(this, Detalles.class);
+           iVista.putExtra("descripcion", a);
+           launcher.launch(iVista);
+             /*
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Descripcion de la Tarea: " + a.getTituloTarea())
                     .setMessage(a.getDescripcionTarea())
@@ -349,6 +354,8 @@ private boolean esFavorita = false;
                     });
             AlertDialog dialog = builder.create();
             dialog.show();
+            */
+
         } else if (item.getItemId() == R.id.editar) {
             Intent iVista = new Intent(this, EditarTarea.class);
             iVista.putExtra("tareaEditable", a);

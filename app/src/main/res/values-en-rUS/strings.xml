@@ -40,4 +40,5 @@
     <string name="adjuntar">Adjuntar</string>
     <string name="borrar_todas_las_tareas">Borrar todas las tareas</string>
     <string name="borrar_todas_las_tareas_completadas">Borrar todas las tareas completadas</string>
+    <string name="imagenes">Imagenes</string>
 </resources>

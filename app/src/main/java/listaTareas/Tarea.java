@@ -186,9 +186,7 @@ public class Tarea implements Serializable {
     }
 
     public String getDiasRestantes() {
-
         Date fechaACctual = new Date();
-
         long diferenciaMillis = fechaObjetivo.getTime() - fechaACctual.getTime() ;
         long diferenciaDias = TimeUnit.MILLISECONDS.toDays(diferenciaMillis);
 
