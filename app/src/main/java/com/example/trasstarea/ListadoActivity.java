@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -37,6 +39,7 @@ import com.example.trasstarea.Fragmentos.CrearTareaActivity;
 import com.example.trasstarea.Fragmentos.EditarTarea;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -47,6 +50,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import estadisticas.Estadisticas;
 import listaTareas.Tarea;
 
 public class ListadoActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -108,6 +112,14 @@ private boolean esFavorita = false;
 
             }
 
+            /*
+    @Override
+    protected void onResume() {
+        actualizarListas();
+        verificarTareaVacia();
+        super.onResume();
+    }
+    */
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, @Nullable String key) {
@@ -374,6 +386,10 @@ private boolean esFavorita = false;
             Intent iVista = new Intent(this, Preferencias.class);
             launcher.launch(iVista);
         }
+        else if (item.getItemId() == R.id.estadisticas){
+            Intent iVista = new Intent(this, Estadisticas.class);
+            launcher.launch(iVista);
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -432,6 +448,24 @@ private boolean esFavorita = false;
             actualizarListas();
         }
     }
+
+
+
+
+    @Override
+    public Resources.Theme getTheme() {
+        SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean b = a.getBoolean("tema", false);
+        if (b){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+        return super.getTheme();
+    }
+
+
     }
 
 

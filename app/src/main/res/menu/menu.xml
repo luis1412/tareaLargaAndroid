@@ -20,6 +20,11 @@
         android:id="@+id/preferencias"
         android:title="@string/preferencias" />
     <item
+        android:id="@+id/estadisticas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Estadisticas" />
+    <item
         android:id="@+id/acercade"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -20,6 +21,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
+
 
 public class Preferencias extends AppCompatActivity {
 
@@ -39,11 +41,6 @@ public class Preferencias extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-
-
-
-
 
         preferencias = PreferenceManager.getDefaultSharedPreferences(this);
     }
@@ -71,6 +68,17 @@ public class Preferencias extends AppCompatActivity {
             SwitchPreference ordenacion = findPreference("ordenacion");
             CheckBoxPreference tarjetaSd = findPreference("tarjeta");
             EditTextPreference limpieza = findPreference("limpieza");
+            Preference restablecer = findPreference("botonRestablecer");
+
+
+            restablecer.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(@NonNull Preference preference) {
+                    reseteatPreferencias();
+                    Toast.makeText(requireContext(), "Reinicia la aplicacion para ver los cambios", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
 
             //Establecemos que solo se puedan introducir numeros
             if (limpieza != null) {
@@ -217,6 +225,16 @@ public class Preferencias extends AppCompatActivity {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPreferences.edit().putString("fuente", estado).apply();
 
+        }
+
+        private void reseteatPreferencias(){
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+            sharedPreferences.edit().putString("fuente", "Mediana").apply();
+            sharedPreferences.edit().putBoolean("tarjeta", false).apply();
+            sharedPreferences.edit().putBoolean("tema", false).apply();
+            sharedPreferences.edit().putString("limpieza", "0").apply();
+            sharedPreferences.edit().putString("criterio", "Alfabético").apply();
+            sharedPreferences.edit().putBoolean("ordenacion", false).apply();
         }
 
     }

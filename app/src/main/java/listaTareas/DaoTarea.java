@@ -1,6 +1,7 @@
 package listaTareas;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -24,6 +25,12 @@ public interface DaoTarea {
     @Query("DELETE FROM tarea WHERE id = :id")
     void borrarTarea(int id);
 
+    @Query("DELETE FROM tarea")
+    void borrarTodasTareas();
+
+    @Query("DELETE FROM tarea WHERE progreso = 100")
+    void borrarTareasCompletadas();
+
     @Query("SELECT * FROM tarea ORDER BY tituloTarea")
     List<Tarea> obtenerTareasAlfabeticas();
 
@@ -35,6 +42,7 @@ public interface DaoTarea {
 
     @Query("SELECT * FROM tarea ORDER BY progreso")
     List<Tarea> obtenerTareasProgreso();
+
 
 
 }

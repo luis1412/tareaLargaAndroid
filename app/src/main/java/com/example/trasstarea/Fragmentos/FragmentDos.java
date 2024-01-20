@@ -112,7 +112,6 @@ public class FragmentDos extends Fragment {
             viewModel.setRutaImagen(rutaImagen);
             comunicador2.onBotonGuardaClicked();
         });
-
         cargarImagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

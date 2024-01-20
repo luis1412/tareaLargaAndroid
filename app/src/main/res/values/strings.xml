@@ -54,5 +54,11 @@
     <string name="video">Video</string>
     <string name="adjuntar">Adjuntar</string>
     <string name="descripcion">Descripcion</string>
+    <string name="title_activity_estadisticas">Estadisticas</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="borrar_todas_las_tareas">Borrar todas las tareas</string>
+    <string name="borrar_todas_las_tareas_completadas">Borrar todas las tareas completadas</string>
 
 </resources>

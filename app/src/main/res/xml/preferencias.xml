@@ -55,14 +55,14 @@
 
     </PreferenceCategory>
     <PreferenceCategory app:title="Base de datos externa" >
-        <EditTextPreference app:title="Nombre base de datos" app:defaultValue="bd" />
-        <EditTextPreference app:title="IP"  app:defaultValue="10.0.2.2"/>
-        <EditTextPreference app:title="Puerto" app:defaultValue="1001"/>
-        <EditTextPreference app:title="Usuario" app:defaultValue="usuario"/>
-        <EditTextPreference app:title="Contraseña" app:defaultValue="password"/>
+        <EditTextPreference android:key="nombre" app:title="Nombre base de datos" app:defaultValue="bd" />
+        <EditTextPreference android:key="ip" app:title="IP"  app:defaultValue="10.0.2.2"/>
+        <EditTextPreference android:key="puerto" app:title="Puerto" app:defaultValue="1001"/>
+        <EditTextPreference android:key="usuario" app:title="Usuario" app:defaultValue="usuario"/>
+        <EditTextPreference android:key="contrasena" app:title="Contraseña" app:defaultValue="password"/>
     </PreferenceCategory>
     <PreferenceCategory app:title="Restablecer">
-        <Preference app:title="Restablecer"/>
+        <Preference android:key="botonRestablecer" app:title="Restablecer"/>
     </PreferenceCategory>
 
 
