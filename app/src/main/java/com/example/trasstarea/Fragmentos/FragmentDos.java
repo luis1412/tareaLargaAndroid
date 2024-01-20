@@ -311,9 +311,7 @@ public class FragmentDos extends Fragment {
                 cargarVideo.setText(rutaVideo);
                 break;
         }
-
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_CODE_SELECT_IMAGE) {

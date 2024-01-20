@@ -48,6 +48,7 @@
             />
 
         <SwitchPreference
+            android:key="bd"
             app:icon="@drawable/baseline_storage_24"
             app:title="Base de datos"
             app:defaultValue="false"

@@ -68,7 +68,37 @@ public class Preferencias extends AppCompatActivity {
             CheckBoxPreference tarjetaSd = findPreference("tarjeta");
             EditTextPreference limpieza = findPreference("limpieza");
             Preference restablecer = findPreference("botonRestablecer");
+            EditTextPreference nombreBd = findPreference("nombre");
+            EditTextPreference ipBd = findPreference("ip");
+            EditTextPreference puertoBd = findPreference("puerto");
+            EditTextPreference usuarioBd = findPreference("usuario");
+            EditTextPreference passBd = findPreference("contrasena");
+            SwitchPreference activarBd = findPreference("bd");
 
+            nombreBd.setEnabled(false);
+            ipBd.setEnabled(false);
+            ipBd.setEnabled(false);
+            usuarioBd.setEnabled(false);
+            puertoBd.setEnabled(false);
+            passBd.setEnabled(false);
+
+
+
+            activarBd.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext().getApplicationContext());
+                    sharedPreferences.edit().putBoolean("bd", (boolean)newValue).apply();
+                    boolean valor = (boolean) newValue;
+                    nombreBd.setEnabled(valor);
+                    ipBd.setEnabled(valor);
+                    ipBd.setEnabled(valor);
+                    usuarioBd.setEnabled(valor);
+                    puertoBd.setEnabled(valor);
+                    passBd.setEnabled(valor);
+                    return true;
+                }
+            });
 
             restablecer.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
