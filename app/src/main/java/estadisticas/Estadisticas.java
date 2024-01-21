@@ -1,5 +1,6 @@
 package estadisticas;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -14,6 +15,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.trasstarea.databinding.ActivityEstadisticasBinding;
+
+import estadisticas.ui.home.HomeFragment;
 
 public class Estadisticas extends AppCompatActivity {
 

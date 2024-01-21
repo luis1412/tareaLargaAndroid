@@ -16,5 +16,4 @@ public interface TareaApi {
     Call<List<Tarea>> obtenerListaTareas();
 
 
-
 }

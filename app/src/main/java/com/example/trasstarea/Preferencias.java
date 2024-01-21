@@ -75,13 +75,25 @@ public class Preferencias extends AppCompatActivity {
             EditTextPreference passBd = findPreference("contrasena");
             SwitchPreference activarBd = findPreference("bd");
 
+            SharedPreferences s = PreferenceManager.getDefaultSharedPreferences(requireContext());
+            boolean bd = s.getBoolean("bd", true);
+            if (!bd){
             nombreBd.setEnabled(false);
             ipBd.setEnabled(false);
             ipBd.setEnabled(false);
             usuarioBd.setEnabled(false);
             puertoBd.setEnabled(false);
             passBd.setEnabled(false);
+            }
+            else {
+                nombreBd.setEnabled(true);
+                ipBd.setEnabled(true);
+                ipBd.setEnabled(true);
+                usuarioBd.setEnabled(true);
+                puertoBd.setEnabled(true);
+                passBd.setEnabled(true);
 
+            }
 
             nombreBd.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -274,7 +286,7 @@ public class Preferencias extends AppCompatActivity {
             sharedPreferences.edit().putString("limpieza", "0").apply();
             sharedPreferences.edit().putString("criterio", "Alfabético").apply();
             sharedPreferences.edit().putBoolean("ordenacion", false).apply();
-
+            sharedPreferences.edit().putBoolean("bd", false).apply();
             getActivity().recreate();
         }
 

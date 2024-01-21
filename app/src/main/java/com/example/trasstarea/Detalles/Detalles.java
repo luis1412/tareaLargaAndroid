@@ -34,7 +34,6 @@ public class Detalles extends AppCompatActivity {
         descripcion.setText(a.getDescripcionTarea());
 
 
-
         String rutaCompleta = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + a.getRutaImagen();
         String rutaCompletaVideo = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + a.getRutaVideo();
         Bitmap bitmap = BitmapFactory.decodeFile(rutaCompleta);

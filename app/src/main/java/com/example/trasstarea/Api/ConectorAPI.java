@@ -19,7 +19,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import listaTareas.Tarea;
@@ -39,7 +41,8 @@ public class ConectorAPI {
        String bdName = a.getString("nombre", "");
 
         String url = bdName + "/api/Tareas";
-        List<Tarea> listaTareas = new ArrayList<>();
+        this.url = url;
+        List<Tarea> listaTareasFinal = new ArrayList<>();
 
         StringRequest postR = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -58,9 +61,10 @@ public class ConectorAPI {
                         tarea.setFechaCreacion(tarea.convertirStringFecha(jsonObject.getString("fechaCreacion")));
                         tarea.setFechaObjetivo(tarea.convertirStringFecha(jsonObject.getString("fechaObjetivo")));
                         tarea.setDiasRestantes(jsonObject.getString("diasRestantes"));
-                        listaTareas.add(tarea);
+                        listaTareasFinal.add(tarea);
                     }
-                    callback.onApiSuccess(listaTareas);
+                    callback.onApiSuccess(listaTareasFinal);
+
                 } catch (JSONException e) {
                     callback.onApiError(e.getMessage());
                 }
@@ -73,6 +77,7 @@ public class ConectorAPI {
         });
         // Agrega la solicitud a la cola de solicitudes de Volley
         Volley.newRequestQueue(c).add(postR);
+
     }
 
 
@@ -134,4 +139,85 @@ public class ConectorAPI {
         });
         return lista;
     }
+
+
+
+    public  void borrarTarea(final String itemId, final ApiCallBack callback) {
+        SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(c);
+        String bdName = a.getString("nombre", "");
+        RequestQueue queue = Volley.newRequestQueue(c);
+        StringRequest deleteRequest = new StringRequest(Request.Method.DELETE, bdName + "/" + "api/Tareas" + "/" + itemId,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Llamar al callback de éxito
+                        if (callback != null) {
+                            callback.onDeleteSuccess(response);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Llamar al callback de error
+                        if (callback != null) {
+                            callback.onDeleteError(error.toString());
+                        }
+                    }
+                });
+        queue.add(deleteRequest);
+        queue.start();
+    }
+
+    public  void updateTarea(final Tarea tarea, final ApiCallBack callback) {
+        RequestQueue queue = Volley.newRequestQueue(c);
+        SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(c);
+        String bdName = a.getString("nombre", "");
+        String url = bdName + "/api/Tareas/" + tarea.getId();
+
+        try {
+            JSONObject jsonTarea = new JSONObject();
+            jsonTarea.put("id", tarea.getId());
+            jsonTarea.put("tituloTarea", tarea.getTituloTarea());
+            jsonTarea.put("progreso", tarea.getProgreso());
+            jsonTarea.put("descripcionTarea", tarea.getDescripcionTarea());
+            jsonTarea.put("prioritaria", tarea.isPrioritaria());
+            jsonTarea.put("fechaCreacion", tarea.getfechaString(tarea.getFechaCreacion()));
+            jsonTarea.put("fechaObjetivo", tarea.getfechaString(tarea.getFechaObjetivo()));
+            jsonTarea.put("diasRestantes", tarea.getDiasRestantes());
+            jsonTarea.put("rutaAudio", tarea.getRutaAudio() != null ? tarea.getRutaAudio() : "");
+            jsonTarea.put("rutaVideo", tarea.getRutaVideo() != null ? tarea.getRutaVideo() : "");
+            jsonTarea.put("rutaImagen", tarea.getRutaImagen() != null ? tarea.getRutaImagen() : "");
+            jsonTarea.put("rutaDocumento", tarea.getRutaDocumento() != null ? tarea.getRutaDocumento() : "");
+
+            JsonObjectRequest putRequest = new JsonObjectRequest(Request.Method.PUT, url, jsonTarea,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            // Llamar al callback de éxito
+                            if (callback != null) {
+                                callback.onUpdateSuccess(response.toString());
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // Llamar al callback de error
+                            if (callback != null) {
+                                callback.onUpdateError(error.toString());
+                            }
+                        }
+                    });
+
+            // Agregar la solicitud a la cola
+            queue.add(putRequest);
+            queue.start();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }

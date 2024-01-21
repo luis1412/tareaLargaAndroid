@@ -1,5 +1,6 @@
 package estadisticas.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
@@ -27,6 +29,7 @@ public class HomeFragment extends Fragment {
     AppDatabase appDatabase;
 
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -40,9 +43,10 @@ public class HomeFragment extends Fragment {
 
         appDatabase = Room.databaseBuilder(requireContext(), AppDatabase.class, "tareasDB").allowMainThreadQueries().build();
 
-
+        //TODO RECOGER LA LISTA DEL ACTIVITY NO DE LA BD
         List<Tarea> tareas = appDatabase.daoTarea().obtenerTareas();
         List<Tarea> tareasP = appDatabase.daoTarea().obtenerTareasPrioritarias();
+
 
         TextView numeroTareas = home.findViewById(R.id.totalTareas);
         TextView numeroTareasP =  home.findViewById(R.id.totalTareasP);

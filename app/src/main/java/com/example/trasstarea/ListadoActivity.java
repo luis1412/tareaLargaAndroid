@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.LogPrinter;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -115,18 +116,31 @@ private boolean esFavorita = false;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
                     if (!editar) {
                         listaTareas.add(tarea);
-                        anadirTareaBD(tarea);
+                        if (bdExterna){
+                            insertarObjetoAPI(tarea);
+                        }
+                        else {
+                             anadirTareaBD(tarea);
+                            }
                     }
                     else{
-                        int contador = 0;
-                        int key=0;
-                        //Tarea tareaBorrar = (Tarea) intent.getSerializableExtra("tareaVieja");
-                        Executor executor = Executors.newSingleThreadExecutor();
-                        executor.execute(new ActualizarTarea(tarea));
+                        if (bdExterna){
+                            actualizarTareaAPI(tarea);
+                            actualizarVista();
+                        }
+                        else {
+                            int contador = 0;
+                            int key=0;
+                            //Tarea tareaBorrar = (Tarea) intent.getSerializableExtra("tareaVieja");
+                            Executor executor = Executors.newSingleThreadExecutor();
+                            executor.execute(new ActualizarTarea(tarea));
+                        }
+
                     }
                     }
                     verificarTareaVacia();
                     adaptador.notifyDataSetChanged();
+                    actualizarVista();
             }
 
         }
@@ -217,12 +231,45 @@ private boolean esFavorita = false;
     public void leerAPI(){
         ConectorAPI conectorAPI = new ConectorAPI(this);
         conectorAPI.obtenerListaTareas(new ApiCallBack() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onApiSuccess(List<Tarea> listaTareas2) {
+                ApiCallBack.super.onApiSuccess(listaTareas2);
                 listaTareas = listaTareas2;
                 asignarListaTareasPrioritarias();
+                //reciclerView(!esFavorita ? listaTareas : listaTareasPrioritarias);
+                // adaptador.notifyDataSetChanged();
+
+                actualizarVista();
             }
         });
+    }
+
+
+    public void actualizarVista(){
+        if (!esFavorita){
+            reciclerView(listaTareas);
+        }
+        else{
+            reciclerView(listaTareasPrioritarias);
+        }
+        verificarTareaVacia();
+    }
+
+
+
+
+
+    public void borrarTareaAPI(String tareaId){
+        ConectorAPI conectorAPI = new ConectorAPI(this);
+        conectorAPI.borrarTarea(tareaId, new ApiCallBack() {
+            @Override
+            public void onDeleteSuccess(String response) {
+                ApiCallBack.super.onDeleteSuccess(response);
+                actualizarListas();
+            }
+        });
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -270,8 +317,11 @@ private boolean esFavorita = false;
                         listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();}
                         break;
                 }
-                reciclerView(!esFavorita ? listaTareas : listaTareasPrioritarias);
-                adaptador.notifyDataSetChanged();
+
+                if (!bdExterna) {
+                    reciclerView(!esFavorita ? listaTareas : listaTareasPrioritarias);
+                    adaptador.notifyDataSetChanged();
+                }
             }
             public void comprobarOrdenInicio(){
               SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(this);
@@ -305,6 +355,24 @@ private boolean esFavorita = false;
 
         }
 
+        public void actualizarTareaAPI(Tarea tarea){
+        ConectorAPI conectorAPI = new ConectorAPI(this);
+        conectorAPI.updateTarea(tarea, new ApiCallBack() {
+            @Override
+            public void onUpdateSuccess(String response) {
+                ApiCallBack.super.onUpdateSuccess(response);
+                Log.e("Volley: " , response);
+                actualizarListas();
+                actualizarVista();
+            }
+            @Override
+            public void onUpdateError(String error) {
+                Log.e("Volley: " , error);
+                ApiCallBack.super.onUpdateError(error);
+            }
+        });
+            actualizarListas();
+        }
 
 
         public void anadirTareaBD(Tarea tarea){
@@ -313,13 +381,7 @@ private boolean esFavorita = false;
         }
 
         public void cambiarFavorito(){
-            if (!esFavorita){
-                reciclerView(listaTareas);
-            }
-            else{
-                reciclerView(listaTareasPrioritarias);
-            }
-            verificarTareaVacia();
+            actualizarVista();
         }
 
 
@@ -458,8 +520,17 @@ private boolean esFavorita = false;
         Tarea a = adaptador.getTarea();
 
         if(item.getItemId() == R.id.borrar){
-            confirmarCambios(a);
-            verificarTareaVacia();
+            SharedPreferences bdExterna = PreferenceManager.getDefaultSharedPreferences(this);
+            boolean bdExternaB = bdExterna.getBoolean("bd", false);
+
+            if (bdExternaB){
+                borrarTareaAPI(a.getId() + "");
+            }
+            else{
+                confirmarCambios(a);
+            }
+                verificarTareaVacia();
+                actualizarListas();
             }
          else if (item.getItemId()== R.id.descripcion) {
             Intent iVista = new Intent(this, Detalles.class);
@@ -572,12 +643,9 @@ private boolean esFavorita = false;
         }
         @Override
         public void run() {
-            if (bdExterna){
-                insertarObjetoAPI(tarea);
-            }
-            else {
+
                 appDatabase.daoTarea().insertarTarea(tarea);
-            }
+
             actualizarListas();
         }
     }

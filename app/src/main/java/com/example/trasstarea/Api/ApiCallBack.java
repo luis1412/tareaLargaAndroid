@@ -13,4 +13,12 @@ public interface ApiCallBack {
 
       default   void onApiSuccessPOST(JSONObject response){};
        default void onApiErrorPOST(String errorMessage){};
+
+       default void onDeleteSuccess(String response){};
+       default void onDeleteError(String response){};
+
+       default void onUpdateSuccess(String response){};
+       default void onUpdateError(String error){};
+
+
 }
