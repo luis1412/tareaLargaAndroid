@@ -156,7 +156,6 @@ public class Tarea implements Serializable {
     }
 
     public String getfechaString(Date fecha){
-
         // Crear un formato de fecha
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         // Convertir la fecha a una cadena de texto

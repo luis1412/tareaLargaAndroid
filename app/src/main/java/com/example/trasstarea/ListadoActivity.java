@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,6 +27,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,13 +36,28 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.trasstarea.Api.TareaApi;
 import com.example.trasstarea.Data.AppDatabase;
 import com.example.trasstarea.Detalles.Detalles;
 import com.example.trasstarea.Fragmentos.CrearTareaActivity;
 import com.example.trasstarea.Fragmentos.EditarTarea;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.Serializable;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -50,19 +67,32 @@ import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import estadisticas.Estadisticas;
 import listaTareas.Tarea;
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ListadoActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 private List<Tarea> listaTareas = new ArrayList<>();
 private List<Tarea> listaTareasPrioritarias = new ArrayList<>();
 
+
+boolean bdExterna;
 TextView txInvisible;
 
 private boolean esFavorita = false;
 
     AdaptadorTarea adaptador;
+
 
     AppDatabase appDatabase;
 
@@ -139,13 +169,107 @@ private boolean esFavorita = false;
         adaptador.notifyDataSetChanged();
     }
 
+/*
+    public void actualizarListaAPI() {
+
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://160a-95-16-240-244.ngrok-free.app/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        TareaApi tareaApi = retrofit.create(TareaApi.class);
+            Call<List<Tarea>> call = tareaApi.obtenerListaTareas();
+            call.enqueue(new Callback<List<Tarea>>() {
+                @Override
+                public void onResponse(Call<List<Tarea>> call, Response<List<Tarea>> response) {
+                    try {
+                        if (response.isSuccessful()){
+                            List<Tarea> listaTareas2 = response.body();
+                            listaTareas = listaTareas2;
+                            listaTareasPrioritarias = listaTareas2;
+                        }
+                    } catch (Exception ex){
+                        Toast.makeText(getApplicationContext(), "No se ha podido conectar con la API", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onFailure(Call<List<Tarea>> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), "No se ha podido conectar con la API ERROR", Toast.LENGTH_SHORT).show();
+                }
+            });
+    }
+*/
+
+
+
+
+    public void asignarListaTareasPrioritarias(){
+        List<Tarea> lista = listaTareas;
+        listaTareasPrioritarias = lista.stream().filter(Tarea::isPrioritaria).collect(Collectors.toList());
+    }
+
+
+    public void leerAPI(){
+        String url = "https://160a-95-16-240-244.ngrok-free.app/api/Tareas";
+
+        StringRequest postR = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                JSONArray jsonArray = null;
+                Tarea tarea = new Tarea();
+                try {
+                    jsonArray = new JSONArray(response);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = null;
+                    try {
+                    jsonObject = jsonArray.getJSONObject(i);
+                    tarea.setId(jsonObject.getInt("id"));
+                    tarea.setTituloTarea(jsonObject.getString("tituloTarea"));
+                    tarea.setProgreso(jsonObject.getInt("progreso"));
+                    tarea.setDescripcionTarea(jsonObject.getString("descripcionTarea"));
+                    tarea.setPrioritaria(jsonObject.getBoolean("prioritaria"));
+                    tarea.setFechaCreacion(tarea.convertirStringFecha(jsonObject.getString("fechaCreacion")));
+                    tarea.setFechaObjetivo(tarea.convertirStringFecha(jsonObject.getString("fechaObjetivo")));
+                    tarea.setDiasRestantes(jsonObject.getString("diasRestantes"));
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    // Agregar la tarea a la lista
+                    listaTareas.add(tarea);
+                }
+
+                asignarListaTareasPrioritarias();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("error", error.getMessage());
+            }
+        });
+        Volley.newRequestQueue(this).add(postR);
+
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     public void actualizarListas(){
+
                 SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(this);
                 String criterio = a.getString("criterio", "Alfabético");
+               bdExterna = a.getBoolean("bd", false);
                 switch (criterio){
                     case "Alfabético":
+                        if (bdExterna){
+                            //actualizarListaAPI();
+                            leerAPI();
+                        }
+                        else{
                         listaTareas = appDatabase.daoTarea().obtenerTareasAlfabeticas();
                         listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();
+                        }
                         break;
                     case "Fecha de creación":
                         listaTareas = appDatabase.daoTarea().obtenerTareasFecha();
@@ -183,6 +307,8 @@ private boolean esFavorita = false;
         comprobarOrdenInicio();
         limpiezaArchivos();
         }
+
+
 
         public void anadirTareaBD(Tarea tarea){
             Executor executor = Executors.newSingleThreadExecutor();
@@ -449,12 +575,51 @@ private boolean esFavorita = false;
         }
         @Override
         public void run() {
-            appDatabase.daoTarea().insertarTarea(tarea);
+            if (bdExterna){
+                insertarObjetoAPI(tarea);
+            }
+            else {
+                appDatabase.daoTarea().insertarTarea(tarea);
+            }
             actualizarListas();
         }
     }
 
 
+    public void insertarObjetoAPI(Tarea tarea){
+        RequestQueue colaPeticiones = Volley.newRequestQueue(this);
+        String url = "https://160a-95-16-240-244.ngrok-free.app/api/Tareas";
+
+        JSONObject jsonUsuario = new JSONObject();
+        try {
+            jsonUsuario.put("tituloTarea", tarea.getTituloTarea());
+            jsonUsuario.put("progreso", tarea.getProgreso());
+           jsonUsuario.put("descripcionTarea", tarea.getDescripcionTarea());
+            jsonUsuario.put("prioritaria", tarea.isPrioritaria());
+            jsonUsuario.put("fechaCreacion", tarea.getfechaString(tarea.getFechaCreacion()));
+            jsonUsuario.put("fechaObjetivo",tarea.getfechaString(tarea.getFechaObjetivo()));
+            jsonUsuario.put("diasRestantes", tarea.getDiasRestantes());
+            jsonUsuario.put("rutaAudio", tarea.getRutaAudio() != null ? tarea.getRutaAudio() : " ");
+            jsonUsuario.put("rutaVideo", tarea.getRutaVideo() != null ? tarea.getRutaVideo() : " ");
+            jsonUsuario.put("rutaImagen", tarea.getRutaImagen() != null ? tarea.getRutaImagen() : " ");
+            jsonUsuario.put("rutaDocumento", tarea.getRutaDocumento() != null ? tarea.getRutaDocumento() : " ");
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest solicitud = new JsonObjectRequest(Request.Method.POST, url, jsonUsuario,
+                response -> {
+                    Log.d("Volley", "Respuesta exitosa: " + response.toString());
+                },
+                error -> {
+                    Log.e("Volley", "Error en la solicitud: " + error.toString());
+                });
+
+        colaPeticiones.add(solicitud);
+        colaPeticiones.start();
+    }
 
 
     @Override
