@@ -481,7 +481,8 @@ private boolean esFavorita = false;
     }
 
 
-    public boolean confirmarCambios(Tarea a){
+    public boolean confirmarCambios(Tarea a, boolean bdExternaB){
+
        final boolean seBorrar = false;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -491,13 +492,19 @@ private boolean esFavorita = false;
         builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
+                if (bdExternaB){
+                    borrarTareaAPI(a.getId() + "");
+                }
+                else{
+
                 int indiceTareaBorrar =  listaTareas.indexOf(a);
                 Executor executor = Executors.newSingleThreadExecutor();
                 executor.execute(new BorrarTarea(listaTareas.get(indiceTareaBorrar)));
-
                // appDatabase.daoTarea().borrarTarea();
                 //listaTareas.remove(indiceTareaBorrar);
                 adaptador.notifyDataSetChanged();
+                }
                 verificarTareaVacia();
             }
         });
@@ -522,13 +529,7 @@ private boolean esFavorita = false;
         if(item.getItemId() == R.id.borrar){
             SharedPreferences bdExterna = PreferenceManager.getDefaultSharedPreferences(this);
             boolean bdExternaB = bdExterna.getBoolean("bd", false);
-
-            if (bdExternaB){
-                borrarTareaAPI(a.getId() + "");
-            }
-            else{
-                confirmarCambios(a);
-            }
+                confirmarCambios(a, bdExternaB);
                 verificarTareaVacia();
                 actualizarListas();
             }
