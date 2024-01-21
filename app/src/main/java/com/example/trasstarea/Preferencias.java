@@ -83,6 +83,15 @@ public class Preferencias extends AppCompatActivity {
             passBd.setEnabled(false);
 
 
+            nombreBd.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext().getApplicationContext());
+                    sharedPreferences.edit().putString("nombre", (String) newValue).apply();
+                    return true;
+                }
+            });
+
 
             activarBd.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override

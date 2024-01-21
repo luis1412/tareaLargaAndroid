@@ -15,6 +15,7 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -43,6 +44,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.trasstarea.Api.ApiCallBack;
+import com.example.trasstarea.Api.ConectorAPI;
 import com.example.trasstarea.Api.TareaApi;
 import com.example.trasstarea.Data.AppDatabase;
 import com.example.trasstarea.Detalles.Detalles;
@@ -61,6 +64,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -93,7 +97,7 @@ private boolean esFavorita = false;
 
     AdaptadorTarea adaptador;
 
-
+    SwipeRefreshLayout srl;
     AppDatabase appDatabase;
 
     private RecyclerView rv;
@@ -211,47 +215,14 @@ private boolean esFavorita = false;
 
 
     public void leerAPI(){
-        String url = "https://160a-95-16-240-244.ngrok-free.app/api/Tareas";
-
-        StringRequest postR = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        ConectorAPI conectorAPI = new ConectorAPI(this);
+        conectorAPI.obtenerListaTareas(new ApiCallBack() {
             @Override
-            public void onResponse(String response) {
-                JSONArray jsonArray = null;
-                Tarea tarea = new Tarea();
-                try {
-                    jsonArray = new JSONArray(response);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = null;
-                    try {
-                    jsonObject = jsonArray.getJSONObject(i);
-                    tarea.setId(jsonObject.getInt("id"));
-                    tarea.setTituloTarea(jsonObject.getString("tituloTarea"));
-                    tarea.setProgreso(jsonObject.getInt("progreso"));
-                    tarea.setDescripcionTarea(jsonObject.getString("descripcionTarea"));
-                    tarea.setPrioritaria(jsonObject.getBoolean("prioritaria"));
-                    tarea.setFechaCreacion(tarea.convertirStringFecha(jsonObject.getString("fechaCreacion")));
-                    tarea.setFechaObjetivo(tarea.convertirStringFecha(jsonObject.getString("fechaObjetivo")));
-                    tarea.setDiasRestantes(jsonObject.getString("diasRestantes"));
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                    // Agregar la tarea a la lista
-                    listaTareas.add(tarea);
-                }
-
+            public void onApiSuccess(List<Tarea> listaTareas2) {
+                listaTareas = listaTareas2;
                 asignarListaTareasPrioritarias();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("error", error.getMessage());
-            }
         });
-        Volley.newRequestQueue(this).add(postR);
-
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -272,16 +243,31 @@ private boolean esFavorita = false;
                         }
                         break;
                     case "Fecha de creación":
+                        if (bdExterna){
+                            leerAPI();
+                            listaTareas = listaTareas.stream().sorted(Comparator.comparing(Tarea::getFechaCreacion)).collect(Collectors.toList());
+                        }
+                        else{
                         listaTareas = appDatabase.daoTarea().obtenerTareasFecha();
-                        listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();
+                        listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();}
                         break;
                     case "Días restantes":
+                        if (bdExterna){
+                            leerAPI();
+                            listaTareas = listaTareas.stream().sorted(Comparator.comparing(Tarea::getDiasRestantes)).collect(Collectors.toList());
+                        }
+                        else{
                         listaTareas = appDatabase.daoTarea().obtenerTareasDias();
-                        listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();
+                        listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();}
                         break;
                     case "Progreso":
+                        if (bdExterna){
+                            leerAPI();
+                            listaTareas = listaTareas.stream().sorted(Comparator.comparing(Tarea::getProgreso)).collect(Collectors.toList());
+                        }
+                        else{
                         listaTareas = appDatabase.daoTarea().obtenerTareasProgreso();
-                        listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();
+                        listaTareasPrioritarias = appDatabase.daoTarea().obtenerTareasPrioritarias();}
                         break;
                 }
                 reciclerView(!esFavorita ? listaTareas : listaTareasPrioritarias);
@@ -299,13 +285,24 @@ private boolean esFavorita = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado);
         appDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "tareasDB").allowMainThreadQueries().build();
-        actualizarListas();
         cambiarFavorito();
+        actualizarListas();
         verificarTareaVacia();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         comprobarOrdenInicio();
         limpiezaArchivos();
+
+        srl = findViewById(R.id.swipeRefreshLayout);
+
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                actualizarListas();
+                srl.setRefreshing(false);
+            }
+        });
+
         }
 
 
@@ -587,38 +584,9 @@ private boolean esFavorita = false;
 
 
     public void insertarObjetoAPI(Tarea tarea){
-        RequestQueue colaPeticiones = Volley.newRequestQueue(this);
-        String url = "https://160a-95-16-240-244.ngrok-free.app/api/Tareas";
+         ConectorAPI conectorAPI = new ConectorAPI(this);;
+        conectorAPI.insertarObjetoAPI(tarea, new ApiCallBack() {});
 
-        JSONObject jsonUsuario = new JSONObject();
-        try {
-            jsonUsuario.put("tituloTarea", tarea.getTituloTarea());
-            jsonUsuario.put("progreso", tarea.getProgreso());
-           jsonUsuario.put("descripcionTarea", tarea.getDescripcionTarea());
-            jsonUsuario.put("prioritaria", tarea.isPrioritaria());
-            jsonUsuario.put("fechaCreacion", tarea.getfechaString(tarea.getFechaCreacion()));
-            jsonUsuario.put("fechaObjetivo",tarea.getfechaString(tarea.getFechaObjetivo()));
-            jsonUsuario.put("diasRestantes", tarea.getDiasRestantes());
-            jsonUsuario.put("rutaAudio", tarea.getRutaAudio() != null ? tarea.getRutaAudio() : " ");
-            jsonUsuario.put("rutaVideo", tarea.getRutaVideo() != null ? tarea.getRutaVideo() : " ");
-            jsonUsuario.put("rutaImagen", tarea.getRutaImagen() != null ? tarea.getRutaImagen() : " ");
-            jsonUsuario.put("rutaDocumento", tarea.getRutaDocumento() != null ? tarea.getRutaDocumento() : " ");
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        JsonObjectRequest solicitud = new JsonObjectRequest(Request.Method.POST, url, jsonUsuario,
-                response -> {
-                    Log.d("Volley", "Respuesta exitosa: " + response.toString());
-                },
-                error -> {
-                    Log.e("Volley", "Error en la solicitud: " + error.toString());
-                });
-
-        colaPeticiones.add(solicitud);
-        colaPeticiones.start();
     }
 
 
