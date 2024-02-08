@@ -43,10 +43,11 @@ public class Detalles extends AppCompatActivity {
 
 
         String rutaCompleta = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + a.getRutaImagen();
-        String rutaCompletaVideo = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + a.getRutaVideo();
+
         Bitmap bitmap = BitmapFactory.decodeFile(rutaCompleta);
         image.setImageBitmap(bitmap);
-
+if (a.getRutaVideo() != null){
+        String rutaCompletaVideo = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + a.getRutaVideo();
         Uri uri = Uri.parse(rutaCompletaVideo);
         videoView.setVideoURI(uri);
 
@@ -55,6 +56,7 @@ public class Detalles extends AppCompatActivity {
         videoView.setMediaController(mediaController);
         // Iniciar la reproducción del video
         videoView.start();
+}
     }
 
 
