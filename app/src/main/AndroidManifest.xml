@@ -2,10 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
-
-
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
@@ -16,11 +13,26 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_icono"
         android:label="@string/app_name"
-        android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TrassTarea"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".Detalles.Archivos.AudioDetalles"
+            android:exported="false" />
+        <activity
+            android:name=".Detalles.Archivos.DocumentsDetalles"
+            android:exported="false" />
+        <activity
+            android:name=".Detalles.Archivos.DocumentosDetalles"
+            android:exported="false" />
+        <activity
+            android:name=".Detalles.Archivos.VideoDetalles"
+            android:exported="false" />
+        <activity
+            android:name=".Detalles.Archivos.ImagenDetalles"
+            android:exported="false" />
         <activity
             android:name=".Detalles.Detalles"
             android:exported="false"

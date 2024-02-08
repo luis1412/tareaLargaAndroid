@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -18,6 +19,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.trasstarea.Detalles.Archivos.AudioDetalles;
+import com.example.trasstarea.Detalles.Archivos.DocumentsDetalles;
+import com.example.trasstarea.Detalles.Archivos.ImagenDetalles;
+import com.example.trasstarea.Detalles.Archivos.VideoDetalles;
 import com.example.trasstarea.R;
 
 import listaTareas.Tarea;
@@ -25,9 +30,7 @@ import listaTareas.Tarea;
 public class Detalles extends AppCompatActivity {
 
     TextView descripcion;
-    VideoView videoView;
-    ImageView image;
-
+    Button botonI, botonV, botonA, botonD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,35 +38,57 @@ public class Detalles extends AppCompatActivity {
         setContentView(R.layout.activity_detalles);
         Intent iDetalles =  getIntent();
         Tarea a = (Tarea) iDetalles.getSerializableExtra("descripcion");
-
-      videoView = findViewById(R.id.videoDetalle);
         descripcion = findViewById(R.id.descripcionDetalles);
-        image = findViewById(R.id.imagenURL);
+
         descripcion.setText(a.getDescripcionTarea());
 
+        botonA = findViewById(R.id.botonAudioDetalles);
+        botonD = findViewById(R.id.botonDocumentoDetalles);
+        botonI = findViewById(R.id.botonImagenDetalles);
+        botonV = findViewById(R.id.botonVideoDetalles);
 
-        String rutaCompleta = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + a.getRutaImagen();
+        botonI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Detalles.this, ImagenDetalles.class);
+                String tuStringExtra = a.getRutaImagen();
+                intent.putExtra("imagen", tuStringExtra);
+                startActivity(intent);
+            }
+        });
 
-        Bitmap bitmap = BitmapFactory.decodeFile(rutaCompleta);
-        image.setImageBitmap(bitmap);
-if (a.getRutaVideo() != null){
-        String rutaCompletaVideo = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + a.getRutaVideo();
-        Uri uri = Uri.parse(rutaCompletaVideo);
-        videoView.setVideoURI(uri);
+        botonD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Detalles.this, DocumentsDetalles.class);
+                String tuStringExtra = a.getRutaDocumento();
+                intent.putExtra("documento", tuStringExtra);
+                startActivity(intent);
+            }
+        });
 
-        MediaController mediaController = new MediaController(this);
-         mediaController.setAnchorView(videoView);
-        videoView.setMediaController(mediaController);
-        // Iniciar la reproducción del video
-        videoView.start();
-}
+
+        botonA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Detalles.this, AudioDetalles.class);
+                String tuStringExtra = a.getRutaAudio();
+                intent.putExtra("audio", tuStringExtra);
+                startActivity(intent);
+            }
+        });
+
+        botonV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Detalles.this, VideoDetalles.class);
+                String tuStringExtra =getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + a.getRutaVideo();
+                intent.putExtra("video", tuStringExtra);
+                startActivity(intent);
+            }
+        });
+
     }
 
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
-        return super.onCreateView(name, context, attrs);
-
-    }
 }
