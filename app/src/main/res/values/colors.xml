@@ -9,4 +9,5 @@
     <color name="colorDelete">#FF0000</color>
     <color name="colorPrimary2">#2196F3</color>
     <color name="colorSecondary">#FFC107</color>
+    <color name="grey">#636260</color>
 </resources>

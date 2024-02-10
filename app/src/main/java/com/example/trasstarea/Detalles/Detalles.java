@@ -1,5 +1,6 @@
 package com.example.trasstarea.Detalles;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -32,6 +33,7 @@ public class Detalles extends AppCompatActivity {
     TextView descripcion;
     Button botonI, botonV, botonA, botonD;
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,29 @@ public class Detalles extends AppCompatActivity {
         botonI = findViewById(R.id.botonImagenDetalles);
         botonV = findViewById(R.id.botonVideoDetalles);
 
+        if (a.getDescripcionTarea().isEmpty()){
+            descripcion.setText("Sin descripción");
+            descripcion.setTextColor(R.color.grey);
+
+        }
+
+        if (a.getRutaVideo() == null){
+            botonV.setEnabled(false);
+            botonV.setText("Video no añadido");
+        }
+        if (a.getRutaImagen() == null){
+            botonI.setEnabled(false);
+            botonI.setText("Imagen no añadida");
+        }
+        if (a.getRutaDocumento() == null){
+            botonD.setEnabled(false);
+            botonD.setText("Vacio");
+        }
+        if (a.getRutaAudio() == null){
+            botonA.setEnabled(false);
+            botonA.setText("Audio no añadido");
+        }
+
         botonI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,7 +86,7 @@ public class Detalles extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Detalles.this, DocumentsDetalles.class);
-                String tuStringExtra = a.getRutaDocumento();
+                String tuStringExtra =getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + a.getRutaDocumento();
                 intent.putExtra("documento", tuStringExtra);
                 startActivity(intent);
             }
@@ -72,8 +97,9 @@ public class Detalles extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Detalles.this, AudioDetalles.class);
-                String tuStringExtra = a.getRutaAudio();
+                String tuStringExtra =getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)+ "/" + a.getRutaAudio();
                 intent.putExtra("audio", tuStringExtra);
+                intent.putExtra("nombreCancion", a.getRutaAudio());
                 startActivity(intent);
             }
         });

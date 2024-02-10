@@ -268,6 +268,10 @@ public class FragmentDos extends Fragment {
 
         String nombreArchivo = tipo+  "%" + imageUri.getLastPathSegment() + "%" + dia + mes + year + formatoArchivo;
 
+        if (nombreArchivo.contains("audio:")){
+      nombreArchivo = nombreArchivo.replace("audio:", "");
+        }
+
 
 
         File imageFile =
