@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.trasstarea.R;
@@ -21,7 +23,7 @@ public class AudioDetalles extends AppCompatActivity {
     MediaPlayer mp;
     TextView tv;
 
-
+    SeekBar pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,8 @@ public class AudioDetalles extends AppCompatActivity {
 
         tv = findViewById(R.id.nombreRecurso);
         tv.setText(nombreArchivo);
+        pb = findViewById(R.id.seekBar);
+
 
 
         play = findViewById(R.id.playButton);
@@ -55,7 +59,38 @@ public class AudioDetalles extends AppCompatActivity {
             }
         });
 
+        pb.setMax(mp.getDuration());
 
+// Actualizar la barra de progreso mientras la canción se reproduce
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (mp != null) {
+                    try {
+                        int currentPosition = mp.getCurrentPosition();
+                        pb.setProgress(currentPosition);
+                        Thread.sleep(1000); // Actualizar la barra de progreso cada segundo
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+        pb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    mp.seekTo(progress);
+                }
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
     }
 
 

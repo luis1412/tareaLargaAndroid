@@ -500,7 +500,7 @@ private boolean esFavorita = false;
 
                 int indiceTareaBorrar =  listaTareas.indexOf(a);
                 Executor executor = Executors.newSingleThreadExecutor();
-                executor.execute(new BorrarTarea(listaTareas.get(indiceTareaBorrar)));
+                executor.execute(new BorrarTarea(a.getId()));
                // appDatabase.daoTarea().borrarTarea();
                 //listaTareas.remove(indiceTareaBorrar);
                 adaptador.notifyDataSetChanged();
@@ -611,13 +611,13 @@ private boolean esFavorita = false;
     }
 
     class BorrarTarea implements Runnable {
-        private Tarea tarea;
-        public BorrarTarea(Tarea tarea) {
-            this.tarea = tarea;
+        private int id;
+        public BorrarTarea(int id) {
+            this.id = id;
         }
         @Override
         public void run() {
-            appDatabase.daoTarea().borrarTarea(tarea.getId());
+            appDatabase.daoTarea().borrarTarea(id);
             actualizarListas();
         }
     }

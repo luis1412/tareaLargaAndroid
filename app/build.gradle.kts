@@ -62,6 +62,9 @@ dependencies {
     implementation( "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
 
+    implementation( "com.dmitryborodin:pdfview-android:1.1.0")
+
+
 
 
 
