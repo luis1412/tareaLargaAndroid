@@ -1,31 +1,34 @@
 package com.example.trasstarea.Fragmentos;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import android.os.Environment;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.trasstarea.R;
@@ -38,9 +41,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,12 +52,15 @@ public class FragmentDos extends Fragment {
     Button  btIr1, btGuardar, cargarImagen, cargarDocumento, cargarAudio, cargarVideo;
     EditText descripcionTarea;
 
+    Uri imageUri2;
     int idTarea;
 
     public int caso = 0;
     String rutaImagen, rutaDocumento, rutaAudio, rutaVideo;
 
     public static final int REQUEST_CODE_SELECT_IMAGE = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 101;
+
 
 
     private CrearTareaViewModel viewModel;
@@ -119,7 +123,8 @@ public class FragmentDos extends Fragment {
         cargarImagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cargarFoto();
+                caso = 1;
+                mostrarDialogoConOpciones();
             }
         });
 
@@ -127,14 +132,18 @@ public class FragmentDos extends Fragment {
         cargarAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cargarAudio();
+
+                caso = 3;
+                mostrarDialogoConOpciones();
             }
         });
 
         cargarVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cargarVideo();
+
+                caso = 4;
+                mostrarDialogoConOpciones();
             }
         });
 
@@ -171,11 +180,106 @@ public class FragmentDos extends Fragment {
         return fragmento2;
     }
 
+    public void mostrarDialogoConOpciones() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // Configuración del diálogo
+        builder.setTitle("Selecciona una opción");
+
+        // Opción 1
+        builder.setPositiveButton("Galería", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if(caso == 1) {
+                    cargarFoto();
+                }
+                else if (caso == 4){
+                    cargarVideo();
+                }
+                else if (caso == 3){
+                    cargarAudio();
+                }
+            }
+        });
+        builder.setIcon(R.drawable.galeria);
+
+        builder.setNegativeButton("Cámara", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+             capturar();
+            }
+        });
+        builder.setIcon(R.drawable.camara);
+
+        builder.create().show();
+    }
+
+
+    public void capturar() {
+        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent aCamaraVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        Intent aGrabadora = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+
+
+        if (caso == 1){
+            lanzadorCamara.launch(i);
+        }
+        else if (caso == 4){
+           lanzarCamaraVideo.launch(aCamaraVideo);
+        }
+        else if (caso == 3){
+            lanzadorGrabadora.launch(aGrabadora);
+        }
+
+    }
+
+    ActivityResultLauncher<Intent> lanzadorGrabadora = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult o) {
+                    Uri audio = o.getData() != null ? o.getData().getData() : null;
+                    if (audio != null){
+                        imageUri2 = audio;
+                    }
+                    escribirArchivos(null, 3, null);
+                }
+
+            }
+    );
+
+    ActivityResultLauncher<Intent> lanzarCamaraVideo = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult o) {
+                    Uri video = o.getData() != null ? o.getData().getData() : null;
+                    if (video != null) {
+                        imageUri2 = video;
+                    }
+                    escribirArchivos(null, 4, null);
+                }
+            }
+    );
+
+    ActivityResultLauncher<Intent> lanzadorCamara = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult o) {
+                   Intent intentDevuelto = o.getData();
+                   Bitmap imagenCapturada = (Bitmap) intentDevuelto.getExtras().get("data");
+                   escribirArchivos(null, caso, imagenCapturada);
+                    }
+                }
+    );
+
+
     public void cargarFoto(){
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("image/*");
         caso = 1;
-
         // Verificar si hay aplicaciones que puedan manejar la acción
         PackageManager packageManager = getActivity().getPackageManager();
         List<ResolveInfo> activities = packageManager.queryIntentActivities(i, 0);
@@ -244,8 +348,11 @@ public class FragmentDos extends Fragment {
 
     }
 
-    public void escribirArchivos(Intent data, int caso){
-        Uri imageUri = data.getData();
+    public void escribirArchivos(Intent data, int caso, Bitmap bitmap){
+        Uri imageUri = imageUri2;
+        if (data != null){
+           imageUri = data.getData();
+        }
         SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(getContext());
         File directorioImagenesAlmacenamientoInterno = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         boolean b = a.getBoolean("tarjeta", false);
@@ -265,14 +372,18 @@ public class FragmentDos extends Fragment {
         //FORMATO DE LOS ARCHIVOS PARA QUE A LA HORA DE BORRARLOS DEPENDIENDO DE LOS DIAS QUE SE HAYA PUESTO EN LA PREFERENCIA
         //DEL SIMBOLO % HACIA DELANTE INDICA A LA FECHA DESDE OTRO LADO CONTROLAREMOS LA FECHA Y BORRAREMOS EN CASO DE QUE
         //HAYAN PASADO LOS DIAS DE LA PREFERENCIA
+        String nombreArchivo;
+        if (bitmap == null){
+       nombreArchivo = tipo+  "%" + imageUri.getLastPathSegment() + "%" + dia + mes + year + formatoArchivo;
+        }
+        else{
+            nombreArchivo = tipo+  "%" + bitmap.toString() + "%" + dia + mes + year + formatoArchivo;
 
-        String nombreArchivo = tipo+  "%" + imageUri.getLastPathSegment() + "%" + dia + mes + year + formatoArchivo;
-
+        }
+        //Tengo que hacer esto ya que debido a los dos puntos MediaPlayer no detecta bien la ruta del archivo
         if (nombreArchivo.contains("audio:")){
       nombreArchivo = nombreArchivo.replace("audio:", "");
         }
-
-
 
         File imageFile =
                 new File(b
@@ -282,6 +393,9 @@ public class FragmentDos extends Fragment {
                         : directorioImagenesAlmacenamientoInterno)
                         : directorioImagenesAlmacenamientoInterno,
                         nombreArchivo);
+
+
+        if (bitmap == null){
         try {
             InputStream inputStream =  getContext().getContentResolver().openInputStream(imageUri);
             OutputStream outputStream = new FileOutputStream(imageFile);
@@ -297,6 +411,22 @@ public class FragmentDos extends Fragment {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        }
+        else{
+            try {
+                FileOutputStream outputStream = new FileOutputStream(imageFile);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                outputStream.flush();
+                outputStream.close();
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
+
         switch (caso){
             case 1:
                 rutaImagen = imageFile.getName();
@@ -320,10 +450,13 @@ public class FragmentDos extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_CODE_SELECT_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
-                escribirArchivos(data, caso);
+                escribirArchivos(data, caso, null);
             } else if (resultCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(requireContext(), "Selección de imagen cancelada", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Selección de archivo cancelado", Toast.LENGTH_SHORT).show();
             }
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            Bitmap imagenCapturada = (Bitmap) data.getExtras().get("data");
+            escribirArchivos(null, caso, imagenCapturada);
         }
     }
 }
